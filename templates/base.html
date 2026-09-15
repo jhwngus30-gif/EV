@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{% block title %}Global D2C Margin OS{% endblock %}</title>
+  
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  
+  <!-- Serif & Sans Typography (이미지 고유 폰트 감성) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;1,6..72,400&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            sand: {
+              50: '#FAF8F5',   // 카드 배경
+              100: '#EFECE6',  // 메인 배경 (이미지 시그니처 웜 톤)
+              200: '#E2DDD3',  // 경계선 및 알약 박스
+              300: '#C7BEAF',  // 톤다운 보조선
+              700: '#524D44',  // 보조 텍스트
+              800: '#2F2C27',  // 주요 텍스트
+              900: '#1B1917',  // 헤드라인 블랙
+            }
+          },
+          fontFamily: {
+            serif: ['Newsreader', 'Georgia', 'serif'],
+            sans: ['Plus Jakarta Sans', 'sans-serif'],
+          }
+        }
+      }
+    }
+  </script>
+</head>
+<body class="bg-sand-100 text-sand-800 font-sans antialiased min-h-screen flex flex-col justify-between">
+
+  <!-- 1. 최상단 실시간 외환 환율 바 (웹/앱 반응형) -->
+  <div class="bg-sand-200/80 border-b border-sand-300/60 px-4 sm:px-8 py-2 text-xs">
+    <div class="max-w-7xl mx-auto flex flex-wrap items-center justify-between gap-3">
+      <div class="flex items-center gap-4 text-sand-800">
+        <span class="flex items-center gap-1.5 font-semibold tracking-wider text-[11px] uppercase">
+          <span class="w-2 h-2 rounded-full bg-emerald-600 animate-pulse"></span> FOREX LIVE
+        </span>
+        <div class="flex items-center gap-4 text-xs">
+          <span>USD <b id="tickerUSD" class="font-semibold text-sand-900 ml-0.5">1,360 ₩</b></span>
+          <span class="hidden sm:inline">EUR <b id="tickerEUR" class="font-semibold ml-0.5">-</b></span>
+          <span class="hidden md:inline">JPY <b id="tickerJPY" class="font-semibold ml-0.5">-</b></span>
+        </div>
+      </div>
+      <div class="flex items-center gap-2">
+        <button onclick="fetchLiveRates(true)" class="px-2.5 py-1 bg-sand-50 hover:bg-white rounded-full border border-sand-300 text-[11px] transition">
+          <i class="fa-solid fa-rotate text-[10px]"></i> 환율 갱신
+        </button>
+        <button onclick="applyLiveRateToCalc()" class="px-3 py-1 bg-sand-900 hover:bg-black text-white rounded-full text-[11px] font-medium transition shadow-sm">
+          계산기에 실시간 환율 적용
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 2. 공통 헤더 네비게이션 -->
+  <header class="border-b border-sand-200 bg-sand-100/90 backdrop-blur sticky top-0 z-30 px-4 sm:px-8">
+    <div class="max-w-7xl mx-auto h-16 flex items-center justify-between">
+      
+      <!-- 로고 & 타이틀 -->
+      <a href="/" class="flex items-center gap-2.5">
+        <div class="w-9 h-9 rounded-full bg-sand-900 text-sand-50 flex items-center justify-center font-serif italic text-base shadow-sm">
+          M
+        </div>
+        <span class="font-serif text-xl sm:text-2xl font-semibold tracking-tight text-sand-900">CrossBorder Margin</span>
+      </a>
+
+      <!-- 데스크톱용 서브메뉴 -->
+      <nav class="hidden md:flex items-center gap-2">
+        <a href="/" class="px-4 py-2 rounded-full text-xs font-semibold transition {% if request.path == '/' %}bg-sand-900 text-white shadow-sm{% else %}text-sand-700 hover:bg-sand-200/70{% endif %}">
+          마진 시뮬레이터
+        </a>
+        <a href="/breakdown" class="px-4 py-2 rounded-full text-xs font-semibold transition {% if request.path == '/breakdown' %}bg-sand-900 text-white shadow-sm{% else %}text-sand-700 hover:bg-sand-200/70{% endif %}">
+          상세 원가명세서
+        </a>
+        <a href="/guide" class="px-4 py-2 rounded-full text-xs font-semibold transition {% if request.path == '/guide' %}bg-sand-900 text-white shadow-sm{% else %}text-sand-700 hover:bg-sand-200/70{% endif %}">
+          인코텀즈 2020 가이드
+        </a>
+      </nav>
+
+      <!-- 모바일 서브메뉴 액션 버튼 -->
+      <div class="flex md:hidden items-center gap-2">
+        <a href="/guide" class="w-9 h-9 rounded-full bg-sand-50 border border-sand-200 flex items-center justify-center text-sand-800" title="가이드">
+          <i class="fa-solid fa-book-open text-xs"></i>
+        </a>
+        <a href="/breakdown" class="w-9 h-9 rounded-full bg-sand-50 border border-sand-200 flex items-center justify-center text-sand-800" title="명세서">
+          <i class="fa-solid fa-file-invoice text-xs"></i>
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <!-- 3. 메인 콘텐츠 (반응형 와이드/모바일 컨테이너) -->
+  <main class="flex-grow max-w-7xl w-full mx-auto px-4 sm:px-8 py-6 sm:py-10 pb-28 md:pb-12">
+    {% block content %}{% endblock %}
+  </main>
+
+  <!-- 4. 하단 플로팅 인풋/어드바이저 바 (이미지의 핵심 디자인 모티프) -->
+  <div class="fixed bottom-5 left-0 right-0 max-w-lg md:max-w-xl mx-auto px-4 pointer-events-none z-40">
+    <div class="pointer-events-auto bg-sand-50/95 backdrop-blur-md border border-sand-200 rounded-full p-1.5 pl-4 shadow-xl flex items-center gap-2">
+      <input id="quickChatInput" type="text" placeholder="DDP 관세, CIF 운임, 마진율 질문..." class="flex-1 bg-transparent text-xs sm:text-sm text-sand-900 placeholder-sand-300 focus:outline-none">
+      <button id="quickSendBtn" class="w-9 h-9 rounded-full bg-sand-900 hover:bg-black text-white flex items-center justify-center transition shadow-sm">
+        <i class="fa-solid fa-arrow-up text-xs"></i>
+      </button>
+    </div>
+  </div>
+
+  <!-- AI 상담 모달 -->
+  <div id="aiModal" class="hidden fixed inset-0 bg-sand-900/40 backdrop-blur-sm z-50 flex items-end sm:items-center justify-center p-4">
+    <div class="bg-sand-50 w-full max-w-md rounded-3xl p-6 border border-sand-200 shadow-2xl space-y-4">
+      <div class="flex justify-between items-center border-b border-sand-200 pb-3">
+        <span class="font-serif italic font-semibold text-lg text-sand-900">Trade Advisory AI</span>
+        <button id="closeAiModal" class="w-8 h-8 rounded-full hover:bg-sand-200 flex items-center justify-center text-sand-700"><i class="fa-solid fa-xmark text-sm"></i></button>
+      </div>
+      <div id="modalUserMsg" class="bg-sand-200/60 p-3 rounded-2xl text-xs text-sand-800 font-medium"></div>
+      <div id="modalAiReply" class="text-xs sm:text-sm text-sand-900 leading-relaxed max-h-64 overflow-y-auto pr-1">
+        응답을 생성하고 있습니다...
+      </div>
+    </div>
+  </div>
+
+  <!-- 푸터 -->
+  <footer class="border-t border-sand-200 bg-sand-100 py-6 text-center text-xs text-sand-700">
+    © 2026 CrossBorder Trade Lab. Warm Editorial Responsive Edition.
+  </footer>
+
+  <script>
+    let currentLiveUsdKrw = 1360.0;
+
+    async function fetchLiveRates(showAlert = false) {
+      try {
+        const res = await fetch('/api/live-rates');
+        const data = await res.json();
+        const r = data.rates;
+        currentLiveUsdKrw = r.KRW;
+        document.getElementById('tickerUSD').innerText = Number(r.KRW).toLocaleString() + ' ₩';
+        document.getElementById('tickerEUR').innerText = Math.round(r.KRW / r.EUR).toLocaleString() + ' ₩';
+        document.getElementById('tickerJPY').innerText = Math.round((r.KRW / r.JPY) * 100).toLocaleString() + ' ₩';
+        if (showAlert) alert('실시간 환율이 동기화되었습니다.');
+      } catch (e) {
+        console.error('환율 조회 실패:', e);
+      }
+    }
+
+    function applyLiveRateToCalc() {
+      const exInput = document.getElementById('exchange_rate');
+      if (exInput) {
+        exInput.value = currentLiveUsdKrw;
+        if (typeof updateCalculations === 'function') updateCalculations();
+        alert(`실시간 환율(${currentLiveUsdKrw}원)이 계산기에 적용되었습니다.`);
+      }
+    }
+
+    // 챗봇 인터랙션
+    const quickInput = document.getElementById('quickChatInput');
+    const quickSend = document.getElementById('quickSendBtn');
+    const modal = document.getElementById('aiModal');
+    const closeModal = document.getElementById('closeAiModal');
+    const userMsgEl = document.getElementById('modalUserMsg');
+    const replyEl = document.getElementById('modalAiReply');
+
+    async function sendQuickChat() {
+      const q = quickInput.value.trim();
+      if (!q) return;
+      quickInput.value = '';
+      userMsgEl.textContent = q;
+      replyEl.innerHTML = '<span class="text-sand-300 animate-pulse">무역 실무 기준을 검토 중입니다...</span>';
+      modal.classList.remove('hidden');
+
+      try {
+        const res = await fetch('/api/chat', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ messages: [{ role: 'user', content: q }] })
+        });
+        const data = await res.json();
+        replyEl.textContent = data.reply || '답변을 가져올 수 없습니다.';
+      } catch (err) {
+        replyEl.textContent = '연결 오류가 발생했습니다.';
+      }
+    }
+
+    quickSend.onclick = sendQuickChat;
+    quickInput.onkeypress = (e) => { if(e.key === 'Enter') sendQuickChat(); };
+    closeModal.onclick = () => modal.classList.add('hidden');
+
+    window.addEventListener('DOMContentLoaded', () => fetchLiveRates());
+  </script>
+</body>
+</html>

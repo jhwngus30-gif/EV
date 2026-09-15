@@ -1,0 +1,265 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="space-y-8">
+
+  <!-- 상단 에디토리얼 인트로 & 알약 캡슐 -->
+  <div class="space-y-3">
+    <div class="inline-flex items-center gap-2 bg-sand-200/80 border border-sand-300/70 px-4 py-1.5 rounded-full text-xs text-sand-800">
+      <i class="fa-solid fa-compass text-sand-700"></i>
+      <span>크로스보더 D2C 수출 원가 & 인코텀즈 2020 정산 대시보드</span>
+    </div>
+    <h1 class="font-serif text-3xl sm:text-5xl font-normal tracking-tight text-sand-900 leading-tight">
+      D2C Global Export Margins
+    </h1>
+    <p class="text-xs sm:text-sm text-sand-700 max-w-2xl">
+      공장도가(EXW)부터 운송비, 관부가세, 플랫폼 수수료, 해외 송금 환전 스프레드를 반영해 순이익과 손익분기점을 동적으로 산출합니다.
+    </p>
+  </div>
+
+  <!-- 그리드 컨테이너: 모바일(1col) / 데스크톱(12cols) -->
+  <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+
+    <!-- 좌측 입력 패널 (모바일 1col, PC 5cols) -->
+    <div class="lg:col-span-5 bg-sand-50 border border-sand-200 rounded-3xl p-6 shadow-sm space-y-6">
+      <div class="flex items-center justify-between border-b border-sand-200/70 pb-3">
+        <h3 class="font-serif italic text-lg text-sand-900 font-semibold">Cost & Pricing Parameters</h3>
+        <i class="fa-solid fa-sliders text-sand-300 text-sm"></i>
+      </div>
+
+      <!-- 실시간 환율 & 판매가 -->
+      <div class="space-y-3">
+        <div class="grid grid-cols-2 gap-3">
+          <div>
+            <label class="block text-[11px] font-semibold text-sand-700 mb-1">목표 판매가 ($ USD)</label>
+            <input type="number" id="target_price_usd" value="39.0" step="0.5" class="w-full bg-sand-100 border border-sand-200 rounded-2xl px-3 py-2 text-sm font-semibold text-sand-900 focus:outline-none focus:border-sand-800">
+          </div>
+          <div>
+            <label class="block text-[11px] font-semibold text-sand-700 mb-1">기준 환율 (₩/USD)</label>
+            <input type="number" id="exchange_rate" value="1360" class="w-full bg-sand-100 border border-sand-200 rounded-2xl px-3 py-2 text-sm font-semibold text-sand-900 focus:outline-none focus:border-sand-800">
+          </div>
+        </div>
+      </div>
+
+      <!-- 제조 및 물류 단계 (Incoterms) -->
+      <div class="space-y-3 pt-2 border-t border-sand-200/70">
+        <span class="text-xs font-semibold text-sand-800 flex items-center gap-1.5">
+          <i class="fa-solid fa-box text-sand-700"></i> 제조 및 운송 원가 (KRW)
+        </span>
+        <div class="grid grid-cols-2 gap-3 text-xs">
+          <div>
+            <label class="block text-sand-700 mb-1">공장도가 (EXW ₩)</label>
+            <input type="number" id="exw_krw" value="15000" class="w-full bg-sand-100 border border-sand-200 rounded-xl px-3 py-2 text-sand-900">
+          </div>
+          <div>
+            <label class="block text-sand-700 mb-1">포장/라벨링 (₩)</label>
+            <input type="number" id="packaging_cost" value="1200" class="w-full bg-sand-100 border border-sand-200 rounded-xl px-3 py-2 text-sand-900">
+          </div>
+          <div>
+            <label class="block text-sand-700 mb-1">내륙운송/통관 (₩)</label>
+            <input type="number" id="local_transport" value="2500" class="w-full bg-sand-100 border border-sand-200 rounded-xl px-3 py-2 text-sand-900">
+          </div>
+          <div>
+            <label class="block text-sand-700 mb-1">해상/항공 운임 (₩)</label>
+            <input type="number" id="intl_freight" value="6500" class="w-full bg-sand-100 border border-sand-200 rounded-xl px-3 py-2 text-sand-900">
+          </div>
+        </div>
+      </div>
+
+      <!-- 관부가세 및 플랫폼 수수료 -->
+      <div class="space-y-3 pt-2 border-t border-sand-200/70">
+        <span class="text-xs font-semibold text-sand-800 flex items-center gap-1.5">
+          <i class="fa-solid fa-receipt text-sand-700"></i> 관세 및 플랫폼 수수료 (%)
+        </span>
+        <div class="grid grid-cols-2 gap-3 text-xs">
+          <div>
+            <label class="block text-sand-700 mb-1">수입 관세율 (%)</label>
+            <input type="number" id="duty_rate" value="8" step="0.5" class="w-full bg-sand-100 border border-sand-200 rounded-xl px-3 py-2 text-sand-900">
+          </div>
+          <div>
+            <label class="block text-sand-700 mb-1">현지 부가세/소비세 (%)</label>
+            <input type="number" id="vat_rate" value="10" step="0.5" class="w-full bg-sand-100 border border-sand-200 rounded-xl px-3 py-2 text-sand-900">
+          </div>
+          <div>
+            <label class="block text-sand-700 mb-1">플랫폼 수수료 (%)</label>
+            <input type="number" id="platform_fee_rate" value="15" step="0.5" class="w-full bg-sand-100 border border-sand-200 rounded-xl px-3 py-2 text-sand-900">
+          </div>
+          <div>
+            <label class="block text-sand-700 mb-1">PG 결제 수수료 (%)</label>
+            <input type="number" id="pg_fee_rate" value="3.0" step="0.1" class="w-full bg-sand-100 border border-sand-200 rounded-xl px-3 py-2 text-sand-900">
+          </div>
+          <div>
+            <label class="block text-sand-700 mb-1">환전 수수료 (%)</label>
+            <input type="number" id="fx_spread_rate" value="1.8" step="0.1" class="w-full bg-sand-100 border border-sand-200 rounded-xl px-3 py-2 text-sand-900">
+          </div>
+          <div>
+            <label class="block text-sand-700 mb-1">반품 충당률 (%)</label>
+            <input type="number" id="return_loss_rate" value="3.0" step="0.5" class="w-full bg-sand-100 border border-sand-200 rounded-xl px-3 py-2 text-sand-900">
+          </div>
+        </div>
+      </div>
+
+      <!-- 숨은 필드 -->
+      <input type="hidden" id="insurance_fee" value="800">
+      <input type="hidden" id="monthly_fixed_cost" value="1500000">
+    </div>
+
+    <!-- 우측 분석 리포트 & 차트 영역 (모바일 1col, PC 7cols) -->
+    <div class="lg:col-span-7 space-y-6">
+
+      <!-- 핵심 메트릭 캡슐 카드 (이미지 스타일의 세련된 라운드 박스) -->
+      <div class="bg-sand-50 border border-sand-200 rounded-3xl p-6 shadow-sm space-y-5">
+        <div class="flex flex-wrap items-center justify-between border-b border-sand-200/70 pb-4 gap-2">
+          <div>
+            <span class="text-[11px] font-semibold tracking-wider uppercase text-sand-700">DDP Net Margin</span>
+            <div id="kpi_margin_rate" class="font-serif text-3xl sm:text-4xl font-semibold text-sand-900 mt-1">- %</div>
+            <div id="kpi_margin_krw" class="text-xs text-sand-700 mt-0.5">건당 - 원 순익</div>
+          </div>
+          <div class="text-right">
+            <span class="text-[11px] font-semibold tracking-wider uppercase text-sand-700">권장 DDP 가격 (25% 마진)</span>
+            <div id="kpi_rec_price" class="font-serif text-2xl sm:text-3xl font-semibold text-sand-900 mt-1">$ -</div>
+            <div id="kpi_bep" class="text-xs text-sand-700 mt-0.5">손익분기점: - 개</div>
+          </div>
+        </div>
+
+        <!-- 인코텀즈 조건별 실수익 카드 4분할 -->
+        <div class="grid grid-cols-2 sm:grid-cols-4 gap-2.5 text-center text-xs">
+          <div class="bg-sand-100 p-3 rounded-2xl border border-sand-200/60">
+            <span class="text-[10px] text-sand-700 block font-semibold">EXW</span>
+            <span id="card_exw" class="font-serif text-sm font-semibold text-sand-900 block mt-1">-</span>
+          </div>
+          <div class="bg-sand-100 p-3 rounded-2xl border border-sand-200/60">
+            <span class="text-[10px] text-sand-700 block font-semibold">FOB</span>
+            <span id="card_fob" class="font-serif text-sm font-semibold text-sand-900 block mt-1">-</span>
+          </div>
+          <div class="bg-sand-100 p-3 rounded-2xl border border-sand-200/60">
+            <span class="text-[10px] text-sand-700 block font-semibold">CIF</span>
+            <span id="card_cif" class="font-serif text-sm font-semibold text-sand-900 block mt-1">-</span>
+          </div>
+          <div class="bg-sand-200/90 p-3 rounded-2xl border border-sand-300/80">
+            <span class="text-[10px] text-sand-900 block font-bold">DDP (최종)</span>
+            <span id="card_ddp" class="font-serif text-sm font-bold text-sand-900 block mt-1">-</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- 워터폴 비용 분해 차트 -->
+      <div class="bg-sand-50 border border-sand-200 rounded-3xl p-6 shadow-sm">
+        <div class="flex items-center justify-between mb-3">
+          <span class="font-serif italic font-semibold text-sm sm:text-base text-sand-900">Cost Breakdown (Waterfall)</span>
+          <span class="text-[11px] text-sand-700">원가 및 차감 항목 분해</span>
+        </div>
+        <div class="h-64 sm:h-72 relative">
+          <canvas id="waterfallChart"></canvas>
+        </div>
+      </div>
+
+    </div>
+
+  </div>
+
+</div>
+
+<script>
+  let waterfallChart = null;
+
+  async function updateCalculations() {
+    const payload = {
+      target_price_usd: document.getElementById('target_price_usd').value,
+      exchange_rate: document.getElementById('exchange_rate').value,
+      exw_krw: document.getElementById('exw_krw').value,
+      packaging_cost: document.getElementById('packaging_cost').value,
+      local_transport: document.getElementById('local_transport').value,
+      intl_freight: document.getElementById('intl_freight').value,
+      insurance_fee: document.getElementById('insurance_fee').value,
+      duty_rate: document.getElementById('duty_rate').value,
+      vat_rate: document.getElementById('vat_rate').value,
+      platform_fee_rate: document.getElementById('platform_fee_rate').value,
+      pg_fee_rate: document.getElementById('pg_fee_rate').value,
+      fx_spread_rate: document.getElementById('fx_spread_rate').value,
+      return_loss_rate: document.getElementById('return_loss_rate').value,
+      monthly_fixed_cost: document.getElementById('monthly_fixed_cost').value,
+    };
+
+    const res = await fetch('/api/calculate', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload)
+    });
+    const data = await res.json();
+
+    document.getElementById('kpi_margin_rate').innerText = data.margin_rate + '%';
+    document.getElementById('kpi_margin_krw').innerText = '건당 ' + Number(data.net_profit_krw).toLocaleString() + '원 순수익';
+    document.getElementById('kpi_rec_price').innerText = '$' + data.rec_price_usd;
+    document.getElementById('kpi_bep').innerText = '월 ' + (typeof data.bep_units === 'number' ? data.bep_units.toLocaleString() : data.bep_units) + '건 BEP';
+
+    document.getElementById('card_exw').innerText = Math.round(data.terms_profit.exw).toLocaleString() + ' ₩';
+    document.getElementById('card_fob').innerText = Math.round(data.terms_profit.fob).toLocaleString() + ' ₩';
+    document.getElementById('card_cif').innerText = Math.round(data.terms_profit.cif).toLocaleString() + ' ₩';
+    document.getElementById('card_ddp').innerText = Math.round(data.terms_profit.ddp).toLocaleString() + ' ₩';
+
+    renderWaterfall(data);
+  }
+
+  function renderWaterfall(data) {
+    const ctx = document.getElementById('waterfallChart').getContext('2d');
+    const labels = ['제조원가', '물류/통관', '관부가세', '플랫폼/수수료', '셀러 순익'];
+    const values = [
+      data.costs.exw,
+      2500 + 6500 + 800,
+      data.costs.tariff + data.costs.vat,
+      data.costs.platform_fee + data.costs.pg_fee + data.costs.fx_fee + data.costs.return_loss,
+      data.net_profit_krw
+    ];
+
+    // 웜 뉴트럴 에디토리얼 컬러 팔레트
+    const colors = ['#C8BEAF', '#A39988', '#D08C5E', '#8C8275', '#1B1917'];
+
+    if (waterfallChart) waterfallChart.destroy();
+
+    waterfallChart = new Chart(ctx, {
+      type: 'bar',
+      data: {
+        labels: labels,
+        datasets: [{
+          data: values,
+          backgroundColor: colors,
+          borderRadius: 8,
+          borderSkipped: false
+        }]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+          legend: { display: false },
+          tooltip: {
+            backgroundColor: '#1B1917',
+            titleFont: { family: 'Plus Jakarta Sans', size: 12 },
+            bodyFont: { family: 'Plus Jakarta Sans', size: 12 },
+            cornerRadius: 10,
+            callbacks: {
+              label: (c) => ' ' + Math.round(c.parsed.y).toLocaleString() + ' 원'
+            }
+          }
+        },
+        scales: {
+          x: {
+            grid: { display: false },
+            ticks: { font: { family: 'Plus Jakarta Sans', size: 11 }, color: '#524D44' }
+          },
+          y: {
+            grid: { color: '#E2DDD3' },
+            ticks: {
+              color: '#524D44',
+              callback: (val) => (val / 1000) + 'k'
+            }
+          }
+        }
+      }
+    });
+  }
+
+  document.querySelectorAll('input').forEach(el => el.addEventListener('input', updateCalculations));
+  window.addEventListener('DOMContentLoaded', updateCalculations);
+</script>
+{% endblock %}

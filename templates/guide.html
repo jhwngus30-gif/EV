@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+{% block title %}Incoterms 2020 가이드 | CrossBorder Margin{% endblock %}
+{% block content %}
+<div class="max-w-4xl mx-auto space-y-6">
+  <div class="space-y-2">
+    <h1 class="font-serif text-3xl sm:text-4xl text-sand-900 font-normal">Incoterms 2020 Reference</h1>
+    <p class="text-xs sm:text-sm text-sand-700">글로벌 이커머스 셀러가 필수적으로 숙지해야 할 4가지 인도조건 정리입니다.</p>
+  </div>
+
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+    <div class="bg-sand-50 border border-sand-200 rounded-3xl p-6 shadow-sm space-y-2">
+      <span class="inline-block px-3 py-1 bg-sand-200 text-sand-800 rounded-full text-xs font-semibold">EXW (공장인도)</span>
+      <h3 class="font-serif text-lg text-sand-900 font-semibold">Ex Works</h3>
+      <p class="text-xs text-sand-700 leading-relaxed">
+        셀러는 공장 바닥에 물품을 두고 출고 준비만 하면 끝납니다. 해외 고객이 직접 물류사를 보낼 수 없으므로 D2C 온라인 판매에는 부적합하며 B2B 대형 계약에 쓰입니다.
+      </p>
+    </div>
+
+    <div class="bg-sand-50 border border-sand-200 rounded-3xl p-6 shadow-sm space-y-2">
+      <span class="inline-block px-3 py-1 bg-sand-200 text-sand-800 rounded-full text-xs font-semibold">FOB (본선인도)</span>
+      <h3 class="font-serif text-lg text-sand-900 font-semibold">Free on Board</h3>
+      <p class="text-xs text-sand-700 leading-relaxed">
+        선박 본선에 화물이 선적될 때까지의 모든 국내 비용과 위험을 셀러가 부담합니다. 전통적인 해상 B2B 무역에서 가장 널리 쓰이는 표준 조건입니다.
+      </p>
+    </div>
+
+    <div class="bg-sand-50 border border-sand-200 rounded-3xl p-6 shadow-sm space-y-2">
+      <span class="inline-block px-3 py-1 bg-sand-200 text-sand-800 rounded-full text-xs font-semibold">CIF (운임·보험료포함)</span>
+      <h3 class="font-serif text-lg text-sand-900 font-semibold">Cost, Insurance & Freight</h3>
+      <p class="text-xs text-sand-700 leading-relaxed">
+        도착지 항구까지의 운임과 적하보험료를 셀러가 대신 지불하지만, 화물이 본선에 실리는 순간 운송 중 파손이나 분실 위험은 바이어에게 넘어갑니다.
+      </p>
+    </div>
+
+    <div class="bg-sand-50 border-2 border-sand-800 rounded-3xl p-6 shadow-sm space-y-2">
+      <span class="inline-block px-3 py-1 bg-sand-900 text-white rounded-full text-xs font-semibold">DDP (관세지급인도) ★ D2C 표준</span>
+      <h3 class="font-serif text-lg text-sand-900 font-semibold">Delivered Duty Paid</h3>
+      <p class="text-xs text-sand-800 leading-relaxed font-medium">
+        해외 현지 수입 통관, 관세, 부가세, 라스트마일 배송까지 전액 셀러가 부담합니다. 해외 소비자가 세금 스트레스 없이 바로 상품을 수령하도록 하는 글로벌 이커머스의 기본 규칙입니다.
+      </p>
+    </div>
+  </div>
+</div>
+{% endblock %}
