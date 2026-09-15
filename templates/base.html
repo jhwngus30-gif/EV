@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>{% block title %}Global D2C Margin OS{% endblock %}</title>
+  <title>{% block title %}Incoterms Margin Engine{% endblock %}</title>
   
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
@@ -39,7 +39,7 @@
 </head>
 <body class="bg-sand-100 text-sand-800 font-sans antialiased min-h-screen flex flex-col justify-between">
 
-  <!-- 환율 헤더 바 -->
+  <!-- 1. 최상단 실시간 외환 환율 바 -->
   <div class="bg-sand-200/90 border-b border-sand-300/70 px-4 sm:px-8 py-2 text-xs">
     <div class="max-w-7xl mx-auto flex flex-wrap items-center justify-between gap-2">
       <div class="flex items-center gap-4">
@@ -63,16 +63,19 @@
     </div>
   </div>
 
-  <!-- 메인 네비게이션 -->
+  <!-- 2. 메인 네비게이션 헤더 (사이트 로고 명칭 변경 반영) -->
   <header class="border-b border-sand-200 bg-sand-100/95 backdrop-blur sticky top-0 z-30 px-4 sm:px-8">
     <div class="max-w-7xl mx-auto h-16 flex items-center justify-between">
+      
+      <!-- 사이트 로고 및 이름 -->
       <a href="/" class="flex items-center gap-2.5">
-        <div class="w-9 h-9 rounded-full bg-sand-900 text-sand-50 flex items-center justify-center font-serif italic text-base">
-          M
+        <div class="w-9 h-9 rounded-full bg-sand-900 text-sand-50 flex items-center justify-center font-serif italic text-base shadow-sm">
+          I
         </div>
-        <span class="font-serif text-xl sm:text-2xl font-semibold tracking-tight text-sand-900">CrossBorder Margin</span>
+        <span class="font-serif text-xl sm:text-2xl font-semibold tracking-tight text-sand-900">Incoterms Margin Engine</span>
       </a>
 
+      <!-- 데스크톱용 서브메뉴 -->
       <nav class="hidden md:flex items-center gap-2">
         <a href="/" class="px-4 py-2 rounded-full text-xs font-semibold transition {% if request.path == '/' %}bg-sand-900 text-white shadow-sm{% else %}text-sand-700 hover:bg-sand-200/70{% endif %}">
           마진 시뮬레이터
@@ -93,15 +96,15 @@
     </div>
   </header>
 
-  <!-- 본문 컨테이너 -->
+  <!-- 3. 메인 콘텐츠 -->
   <main class="flex-grow max-w-7xl w-full mx-auto px-4 sm:px-8 py-6 sm:py-10 pb-28 md:pb-12">
     {% block content %}{% endblock %}
   </main>
 
-  <!-- 하단 플로팅 인풋/어드바이저 바 -->
+  <!-- 4. 하단 플로팅 인풋/어드바이저 바 -->
   <div class="fixed bottom-5 left-0 right-0 max-w-lg md:max-w-xl mx-auto px-4 pointer-events-none z-40">
     <div class="pointer-events-auto bg-sand-50/95 backdrop-blur-md border border-sand-200 rounded-full p-1.5 pl-4 shadow-xl flex items-center gap-2">
-      <input id="quickChatInput" type="text" placeholder="인코텀즈, 관세 환급, 마진율 질문..." class="flex-1 bg-transparent text-xs sm:text-sm text-sand-900 placeholder-sand-300 focus:outline-none">
+      <input id="quickChatInput" type="text" placeholder="인코텀즈 조건, 관세 환급, 마진율 질문..." class="flex-1 bg-transparent text-xs sm:text-sm text-sand-900 placeholder-sand-300 focus:outline-none">
       <button id="openModalBtn" onclick="openChatModal()" class="w-9 h-9 rounded-full bg-sand-200 text-sand-800 hover:bg-sand-300 flex items-center justify-center transition" title="대화창 전체보기">
         <i class="fa-solid fa-expand text-xs"></i>
       </button>
@@ -111,7 +114,7 @@
     </div>
   </div>
 
-  <!-- 대폭 확대 및 가독성이 강화된 AI 대화창 (모달) -->
+  <!-- 5. 대형 AI 챗봇 모달 (대화 기억 및 가독성 최적화) -->
   <div id="aiModal" class="hidden fixed inset-0 bg-sand-900/50 backdrop-blur-sm z-50 flex items-center justify-center p-3 sm:p-6">
     <div class="bg-sand-50 w-full max-w-2xl h-[85vh] max-h-[750px] rounded-3xl border border-sand-200 shadow-2xl flex flex-col overflow-hidden">
       
@@ -132,20 +135,19 @@
         </div>
       </div>
 
-      <!-- 메시지 대화 흐름 영역 -->
+      <!-- 메시지 목록 스크롤 영역 -->
       <div id="chatMessages" class="flex-1 p-6 overflow-y-auto space-y-4 text-sm leading-relaxed bg-sand-50">
-        <!-- 초기 웰컴 메시지 -->
         <div class="flex gap-3">
           <div class="w-8 h-8 rounded-full bg-sand-900 text-white flex-shrink-0 flex items-center justify-center font-serif text-xs">AI</div>
           <div class="bg-sand-100 border border-sand-200 p-4 rounded-2xl max-w-[85%] text-sand-900 shadow-sm text-sm">
-            안녕하세요! 관세 환급, 인코텀즈 2020 규칙, 아마존/쇼피 정산 리스크 및 마진 개선에 대해 무엇이든 물어보세요. 질문 내용이 자동으로 기억되어 연속 질문이 가능합니다.
+            안녕하세요! Incoterms 2020 규칙, 해상/항공 운임, 관세 및 정산 마진 개선에 대해 무엇이든 질문해주세요.
           </div>
         </div>
       </div>
 
       <!-- 모달 하단 인풋창 -->
       <div class="p-4 bg-sand-100/80 border-t border-sand-200 flex gap-2 items-center">
-        <input id="modalInput" type="text" placeholder="질문을 입력하세요 (예: CIF 조건에서 B/L 양도는 어떻게 처리해?)" class="flex-1 px-4 py-3 bg-white border border-sand-200 rounded-2xl text-sm text-sand-900 focus:outline-none focus:border-sand-800 shadow-inner">
+        <input id="modalInput" type="text" placeholder="질문을 입력하세요 (예: 컨테이너 화물에 FOB 대신 FCA를 써야 하는 이유가 뭐야?)" class="flex-1 px-4 py-3 bg-white border border-sand-200 rounded-2xl text-sm text-sand-900 focus:outline-none focus:border-sand-800 shadow-inner">
         <button id="modalSendBtn" class="px-5 py-3 bg-sand-900 hover:bg-black text-white rounded-2xl text-sm font-semibold transition shadow-sm flex items-center gap-1.5">
           <span>전송</span>
           <i class="fa-solid fa-paper-plane text-xs"></i>
@@ -154,8 +156,9 @@
     </div>
   </div>
 
+  <!-- 푸터 -->
   <footer class="border-t border-sand-200 bg-sand-100 py-6 text-center text-xs text-sand-700">
-    © 2026 CrossBorder Trade Lab. Warm Editorial Edition.
+    © 2026 Incoterms Margin Engine. All Rights Reserved.
   </footer>
 
   <script>
@@ -209,7 +212,7 @@
         <div class="flex gap-3">
           <div class="w-8 h-8 rounded-full bg-sand-900 text-white flex-shrink-0 flex items-center justify-center font-serif text-xs">AI</div>
           <div class="bg-sand-100 border border-sand-200 p-4 rounded-2xl max-w-[85%] text-sand-900 shadow-sm text-sm">
-            안녕하세요! 질문 내용이 자동으로 기억되어 연속 질문이 가능합니다.
+            안녕하세요! Incoterms 2020 규칙, 해상/항공 운임, 관세 및 정산 마진 개선에 대해 무엇이든 질문해주세요.
           </div>
         </div>
       `;
@@ -253,7 +256,7 @@
         <div id="${loadingId}" class="flex gap-3">
           <div class="w-8 h-8 rounded-full bg-sand-900 text-white flex-shrink-0 flex items-center justify-center font-serif text-xs">AI</div>
           <div class="bg-sand-100 border border-sand-200 p-4 rounded-2xl text-sand-700 text-sm animate-pulse">
-            무역 실무 데이터 및 관세 기준을 검토 중입니다...
+            Incoterms 실무 데이터 및 무역 기준을 검토 중입니다...
           </div>
         </div>
       `;
