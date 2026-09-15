@@ -11,8 +11,7 @@ app = Flask(__name__)
 api_key = os.getenv("OPENAI_API_KEY")
 client = OpenAI(api_key=api_key) if api_key else None
 
-# 캐시용 환율 데이터
-EXCHANGE_CACHE = {"rates": {"KRW": 1360.0, "EUR": 0.92, "JPY": 155.0, "CNY": 7.25}, "updated": ""}
+EXCHANGE_CACHE = {"rates": {"KRW": 1360.0, "EUR": 0.92, "JPY": 155.0}, "updated": ""}
 
 @app.route("/")
 def index():
@@ -26,13 +25,11 @@ def guide():
 def breakdown():
     return render_template("breakdown.html")
 
-# 1. 실시간 환율 조회 API
 @app.route("/api/live-rates", methods=["GET"])
 def get_live_rates():
     global EXCHANGE_CACHE
     try:
-        # 인증키 없이 무료 제공되는 글로벌 오픈 환율 API
-        res = requests.get("https://open.er-api.com/v6/latest/USD", timeout=4)
+        res = requests.get("https://open.er-api.com/v6/latest/USD", timeout=3)
         if res.status_code == 200:
             data = res.json()
             rates = data.get("rates", {})
@@ -40,88 +37,81 @@ def get_live_rates():
                 "KRW": round(rates.get("KRW", 1360.0), 2),
                 "EUR": round(rates.get("EUR", 0.92), 4),
                 "JPY": round(rates.get("JPY", 155.0), 2),
-                "CNY": round(rates.get("CNY", 7.25), 2),
             }
             EXCHANGE_CACHE["updated"] = data.get("time_last_update_utc", "")[:16]
-    except Exception as e:
-        pass # 실패 시 캐시된 기본값 사용
+    except Exception:
+        pass
     return jsonify(EXCHANGE_CACHE)
 
-# 2. 고도화된 무역 마진 정산 엔진
 @app.route("/api/calculate", methods=["POST"])
 def calculate():
     data = request.json or {}
+    currency = data.get("currency", "KRW") # "KRW" or "USD"
+    rate = float(data.get("exchange_rate", 1360.0))
 
-    # 기본 파라미터 수신
-    exw_krw = float(data.get("exw_krw", 15000))                 # EXW 제조원가
-    packaging_cost = float(data.get("packaging_cost", 1200))     # 수출 포장/바코드/라벨링
-    local_transport = float(data.get("local_transport", 2500))   # 수출 통관+내륙운송+공항/항만하역
-    intl_freight = float(data.get("intl_freight", 6500))         # 국제운임 (해상/항공)
-    insurance_fee = float(data.get("insurance_fee", 800))        # 적하보험료
-    duty_rate = float(data.get("duty_rate", 8)) / 100.0          # 수입 관세율
-    vat_rate = float(data.get("vat_rate", 10)) / 100.0           # 현지 소비세/VAT
-    platform_fee_rate = float(data.get("platform_fee_rate", 15)) / 100.0 # 쇼피/아마존 수수료
-    pg_fee_rate = float(data.get("pg_fee_rate", 3.0)) / 100.0    # 결제 수수료
-    fx_spread_rate = float(data.get("fx_spread_rate", 1.8)) / 100.0 # 해외 송금/환전 수수료
-    return_loss_rate = float(data.get("return_loss_rate", 3.0)) / 100.0 # 반품/분실 손실충당
-    monthly_fixed_cost = float(data.get("monthly_fixed_cost", 1500000)) # 월 고정 운영비
+    def to_krw(val):
+        val = float(val or 0)
+        return val * rate if currency == "USD" else val
 
-    target_price_usd = float(data.get("target_price_usd", 39.0)) # 판매가 (USD)
-    exchange_rate = float(data.get("exchange_rate", 1360.0))     # 적용 환율
+    exw_krw = to_krw(data.get("exw_val", 15000))
+    pack_krw = to_krw(data.get("pack_val", 1200))
+    local_trans_krw = to_krw(data.get("local_trans_val", 2500))
+    intl_freight_krw = to_krw(data.get("intl_freight_val", 6500))
+    insurance_krw = to_krw(data.get("insurance_val", 800))
+    
+    duty_rate = float(data.get("duty_rate", 8)) / 100.0
+    vat_rate = float(data.get("vat_rate", 10)) / 100.0
+    platform_fee_rate = float(data.get("platform_fee_rate", 15)) / 100.0
+    pg_fee_rate = float(data.get("pg_fee_rate", 3.0)) / 100.0
+    fx_spread_rate = float(data.get("fx_spread_rate", 1.8)) / 100.0
+    return_loss_rate = float(data.get("return_loss_rate", 3.0)) / 100.0
 
-    # 인코텀즈 단계별 원가 누적
-    base_exw = exw_krw + packaging_cost
-    fob_cost = base_exw + local_transport
-    cif_cost = fob_cost + intl_freight + insurance_fee
+    target_price = float(data.get("target_price", 39.0))
+    gross_rev_krw = target_price * rate if currency == "USD" else target_price
 
-    # DDP 관부가세
-    tariff = cif_cost * duty_rate
-    duty_paid = cif_cost + tariff
+    # 인코텀즈 단계별 원가
+    exw_total = exw_krw + pack_krw
+    fob_total = exw_total + local_trans_krw
+    cif_total = fob_total + intl_freight_krw + insurance_krw
+
+    tariff = cif_total * duty_rate
+    duty_paid = cif_total + tariff
     vat = duty_paid * vat_rate
-    ddp_logistics_cost = duty_paid + vat
+    ddp_logistics = duty_paid + vat
 
-    # 플랫폼 정산 수수료 및 부가비용
-    gross_revenue_krw = target_price_usd * exchange_rate
-    platform_fee = gross_revenue_krw * platform_fee_rate
-    pg_fee = gross_revenue_krw * pg_fee_rate
-    fx_fee = gross_revenue_krw * fx_spread_rate
-    return_loss = gross_revenue_krw * return_loss_rate
+    # 플랫폼 및 기타 운영 공제
+    platform_fee = gross_rev_krw * platform_fee_rate
+    pg_fee = gross_rev_krw * pg_fee_rate
+    fx_fee = gross_rev_krw * fx_spread_rate
+    return_loss = gross_rev_krw * return_loss_rate
+    total_deductions = platform_fee + pg_fee + fx_fee + return_loss
 
-    total_operating_deductions = platform_fee + pg_fee + fx_fee + return_loss
-    total_ddp_cost = ddp_logistics_cost + total_operating_deductions
-    net_profit_krw = gross_revenue_krw - total_ddp_cost
-    margin_rate = (net_profit_krw / gross_revenue_krw * 100) if gross_revenue_krw > 0 else 0
+    net_profit_krw = gross_rev_krw - (ddp_logistics + total_deductions)
+    margin_rate = (net_profit_krw / gross_rev_krw * 100) if gross_rev_krw > 0 else 0
 
-    # 목표 마진 25% 달성을 위한 역산 권장 판매가 (USD)
-    # TargetRev * (1 - OpDeductionsRatio - MarginRatio) = ddp_logistics_cost
     denom = 1 - (platform_fee_rate + pg_fee_rate + fx_spread_rate + return_loss_rate + 0.25)
-    rec_price_usd = (ddp_logistics_cost / denom / exchange_rate) if denom > 0 else 0
-
-    # 손익분기점(BEP) 월 판매 수량
-    bep_units = int(monthly_fixed_cost / net_profit_krw) if net_profit_krw > 0 else "달성불가"
+    rec_price_usd = (ddp_logistics / denom / rate) if (denom > 0 and rate > 0) else 0
 
     return jsonify({
-        "gross_revenue_krw": round(gross_revenue_krw),
+        "currency": currency,
+        "rate": rate,
+        "gross_rev_krw": round(gross_rev_krw),
         "net_profit_krw": round(net_profit_krw),
         "margin_rate": round(margin_rate, 2),
         "rec_price_usd": round(rec_price_usd, 2),
-        "bep_units": bep_units,
         "costs": {
-            "exw": round(base_exw),
-            "fob": round(fob_cost),
-            "cif": round(cif_cost),
-            "ddp_logistics": round(ddp_logistics_cost),
+            "exw": round(exw_total),
+            "fob": round(fob_total),
+            "cif": round(cif_total),
+            "ddp_logistics": round(ddp_logistics),
             "tariff": round(tariff),
             "vat": round(vat),
-            "platform_fee": round(platform_fee),
-            "pg_fee": round(pg_fee),
-            "fx_fee": round(fx_fee),
-            "return_loss": round(return_loss)
+            "operating_fees": round(total_deductions)
         },
-        "terms_profit": {
-            "exw": round(gross_revenue_krw - base_exw - total_operating_deductions),
-            "fob": round(gross_revenue_krw - fob_cost - total_operating_deductions),
-            "cif": round(gross_revenue_krw - cif_cost - total_operating_deductions),
+        "profits": {
+            "exw": round(gross_rev_krw - exw_total - total_deductions),
+            "fob": round(gross_rev_krw - fob_total - total_deductions),
+            "cif": round(gross_rev_krw - cif_total - total_deductions),
             "ddp": round(net_profit_krw)
         }
     })
@@ -129,22 +119,25 @@ def calculate():
 @app.route("/api/chat", methods=["POST"])
 def chat():
     if not client:
-        return jsonify({"reply": "OpenAI API 키가 설정되지 않았습니다. .env 환경변수를 확인해주세요."}), 500
+        return jsonify({"reply": "OpenAI API 키가 설정되지 않았습니다. .env 파일을 확인해주세요."}), 500
     data = request.json or {}
     messages = data.get("messages", [])
+    
     system_prompt = {
         "role": "system",
         "content": (
             "당신은 글로벌 무역 및 크로스보더 이커머스 전문 경영 컨설턴트입니다. "
-            "Incoterms 2020 규칙, HS코드 관세, 플랫폼 마진 전략, 환율 헷징, 물류비 절감 팁을 신뢰도 높은 어조로 조언하세요."
+            "이전 대화 맥락을 충분히 파악하며 대답하세요. "
+            "가독성을 위해 핵심 요점을 1, 2, 3 번호 매기기와 굵은 글씨를 활용해 깔끔하고 명확하게 한국어로 제시하십시오."
         )
     }
+
     try:
         res = client.chat.completions.create(
             model="gpt-4o-mini",
             messages=[system_prompt] + messages,
             temperature=0.3,
-            max_tokens=600
+            max_tokens=800
         )
         return jsonify({"reply": res.choices[0].message.content})
     except Exception as e:

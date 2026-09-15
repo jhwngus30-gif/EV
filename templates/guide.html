@@ -1,44 +1,87 @@
 {% extends "base.html" %}
-{% block title %}Incoterms 2020 가이드 | CrossBorder Margin{% endblock %}
+{% block title %}Incoterms 2020 실무 가이드 & 유의점 | CrossBorder Margin{% endblock %}
 {% block content %}
 <div class="max-w-4xl mx-auto space-y-6">
+  
   <div class="space-y-2">
-    <h1 class="font-serif text-3xl sm:text-4xl text-sand-900 font-normal">Incoterms 2020 Reference</h1>
-    <p class="text-xs sm:text-sm text-sand-700">글로벌 이커머스 셀러가 필수적으로 숙지해야 할 4가지 인도조건 정리입니다.</p>
+    <h1 class="font-serif text-3xl sm:text-4xl text-sand-900 font-normal">Incoterms 2020 Reference & Caution Points</h1>
+    <p class="text-xs sm:text-sm text-sand-700">각 조건별 핵심 정의와 실제 계약 체결 시 셀러가 반드시 점검해야 할 유의점입니다.</p>
   </div>
 
   <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
-    <div class="bg-sand-50 border border-sand-200 rounded-3xl p-6 shadow-sm space-y-2">
-      <span class="inline-block px-3 py-1 bg-sand-200 text-sand-800 rounded-full text-xs font-semibold">EXW (공장인도)</span>
+
+    <!-- EXW -->
+    <div class="bg-sand-50 border border-sand-200 rounded-3xl p-6 shadow-sm space-y-3">
+      <div class="flex items-center justify-between">
+        <span class="px-3 py-1 bg-sand-200 text-sand-800 rounded-full text-xs font-bold">EXW (공장인도)</span>
+        <span class="text-xs text-sand-700">판매자 최소 의무</span>
+      </div>
       <h3 class="font-serif text-lg text-sand-900 font-semibold">Ex Works</h3>
       <p class="text-xs text-sand-700 leading-relaxed">
-        셀러는 공장 바닥에 물품을 두고 출고 준비만 하면 끝납니다. 해외 고객이 직접 물류사를 보낼 수 없으므로 D2C 온라인 판매에는 부적합하며 B2B 대형 계약에 쓰입니다.
+        공장 출고 준비만 완료하면 인도가 끝납니다. 해외 소비자가 물류사를 보낼 수 없는 D2C 온라인 채널에는 사용 불가하며 대형 B2B 납품용입니다.
       </p>
+      <!-- 실무 유의점 -->
+      <div class="bg-sand-100/80 p-3 rounded-2xl border border-sand-200 text-[11px] text-sand-800 space-y-1">
+        <div class="font-bold text-sand-900 flex items-center gap-1"><i class="fa-solid fa-triangle-exclamation text-amber-700"></i> 실무 선택 시 유의점:</div>
+        <p>• <b>수출실적 증빙 및 영세율 적용:</b> 바이어가 지정한 포워더가 수출신고필증을 셀러에게 전달해주지 않으면 부가세 영세율이나 수출실적 인정을 못 받을 위험이 있습니다.</p>
+        <p>• <b>상차 책임:</b> 원칙상 셀러는 트럭에 짐을 실어줄 의무가 없습니다. 공장 지게차 상차 중 파손 시 분쟁이 발생하므로 계약서에 상차 책임 주체를 명기해야 합니다.</p>
+      </div>
     </div>
 
-    <div class="bg-sand-50 border border-sand-200 rounded-3xl p-6 shadow-sm space-y-2">
-      <span class="inline-block px-3 py-1 bg-sand-200 text-sand-800 rounded-full text-xs font-semibold">FOB (본선인도)</span>
+    <!-- FOB -->
+    <div class="bg-sand-50 border border-sand-200 rounded-3xl p-6 shadow-sm space-y-3">
+      <div class="flex items-center justify-between">
+        <span class="px-3 py-1 bg-sand-200 text-sand-800 rounded-full text-xs font-bold">FOB (본선인도)</span>
+        <span class="text-xs text-sand-700">해상 전통 표준</span>
+      </div>
       <h3 class="font-serif text-lg text-sand-900 font-semibold">Free on Board</h3>
       <p class="text-xs text-sand-700 leading-relaxed">
-        선박 본선에 화물이 선적될 때까지의 모든 국내 비용과 위험을 셀러가 부담합니다. 전통적인 해상 B2B 무역에서 가장 널리 쓰이는 표준 조건입니다.
+        수출항 선박의 본선에 화물이 적재될 때까지의 모든 국내 운송과 통관비용을 셀러가 부담합니다.
       </p>
+      <!-- 실무 유의점 -->
+      <div class="bg-sand-100/80 p-3 rounded-2xl border border-sand-200 text-[11px] text-sand-800 space-y-1">
+        <div class="font-bold text-sand-900 flex items-center gap-1"><i class="fa-solid fa-triangle-exclamation text-amber-700"></i> 실무 선택 시 유의점:</div>
+        <p>• <b>선복 부족 및 데스크 지연:</b> 바이어가 선박 수배를 제때 못 하면 화물이 국내 부두 창고에 장기 체류하며 발생하는 보관료(Demurrage)를 셀러가 떠안을 수 있습니다.</p>
+        <p>• <b>항공 운송 부적합:</b> FOB는 원칙상 해상·내수로 전용입니다. 항공이나 컨테이너 CY 인도 시에는 <b>FCA 조건</b>을 사용하는 것이 공식 권장사항입니다.</p>
+      </div>
     </div>
 
-    <div class="bg-sand-50 border border-sand-200 rounded-3xl p-6 shadow-sm space-y-2">
-      <span class="inline-block px-3 py-1 bg-sand-200 text-sand-800 rounded-full text-xs font-semibold">CIF (운임·보험료포함)</span>
+    <!-- CIF -->
+    <div class="bg-sand-50 border border-sand-200 rounded-3xl p-6 shadow-sm space-y-3">
+      <div class="flex items-center justify-between">
+        <span class="px-3 py-1 bg-sand-200 text-sand-800 rounded-full text-xs font-bold">CIF (운임·보험료포함)</span>
+        <span class="text-xs text-sand-700">비용/위험 분리</span>
+      </div>
       <h3 class="font-serif text-lg text-sand-900 font-semibold">Cost, Insurance & Freight</h3>
       <p class="text-xs text-sand-700 leading-relaxed">
-        도착지 항구까지의 운임과 적하보험료를 셀러가 대신 지불하지만, 화물이 본선에 실리는 순간 운송 중 파손이나 분실 위험은 바이어에게 넘어갑니다.
+        도착지 항구까지의 운임과 적하보험을 셀러가 지불하지만, 화물이 본선에 실린 이후 항해 중 파손 사고 위험은 바이어에게 넘어갑니다.
       </p>
+      <!-- 실무 유의점 -->
+      <div class="bg-sand-100/80 p-3 rounded-2xl border border-sand-200 text-[11px] text-sand-800 space-y-1">
+        <div class="font-bold text-sand-900 flex items-center gap-1"><i class="fa-solid fa-triangle-exclamation text-amber-700"></i> 실무 선택 시 유의점:</div>
+        <p>• <b>최소 담보 조건(LMA/ICC-C):</b> 규칙상 셀러는 가장 낮은 수준의 보험(C조건)만 들면 됩니다. 파손 위험이 높은 제품이라면 바이어와 협의해 전위험담보(A조건)를 계약서에 명시해야 합니다.</p>
+        <p>• <b>도착항 하역비(THC) 이중 청구:</b> 목적지 항구의 터미널 하역비가 운임에 포함되었는지 여부를 명확히 하지 않으면 바이어와 분쟁이 잦습니다.</p>
+      </div>
     </div>
 
-    <div class="bg-sand-50 border-2 border-sand-800 rounded-3xl p-6 shadow-sm space-y-2">
-      <span class="inline-block px-3 py-1 bg-sand-900 text-white rounded-full text-xs font-semibold">DDP (관세지급인도) ★ D2C 표준</span>
+    <!-- DDP -->
+    <div class="bg-sand-50 border-2 border-sand-800 rounded-3xl p-6 shadow-sm space-y-3">
+      <div class="flex items-center justify-between">
+        <span class="px-3 py-1 bg-sand-900 text-white rounded-full text-xs font-bold">DDP ★ D2C 표준</span>
+        <span class="text-xs font-bold text-sand-900">판매자 최대 의무</span>
+      </div>
       <h3 class="font-serif text-lg text-sand-900 font-semibold">Delivered Duty Paid</h3>
       <p class="text-xs text-sand-800 leading-relaxed font-medium">
-        해외 현지 수입 통관, 관세, 부가세, 라스트마일 배송까지 전액 셀러가 부담합니다. 해외 소비자가 세금 스트레스 없이 바로 상품을 수령하도록 하는 글로벌 이커머스의 기본 규칙입니다.
+        목적지 수입 관세, 현지 소비세(VAT), 문앞 배송까지 전 과정을 셀러가 전액 부담합니다. 글로벌 크로스보더 전자상거래의 기본 규격입니다.
       </p>
+      <!-- 실무 유의점 -->
+      <div class="bg-sand-200/90 p-3 rounded-2xl border border-sand-300 text-[11px] text-sand-900 space-y-1">
+        <div class="font-bold text-sand-900 flex items-center gap-1"><i class="fa-solid fa-triangle-exclamation text-rose-700"></i> 실무 선택 시 유의점:</div>
+        <p>• <b>현지 수입자(IOR) 등록:</b> 국가에 따라 현지 사업자등록증이 없는 해외 셀러의 수입신고를 거부할 수 있습니다. 특송사(DHL, FedEx)의 간이통관 대행이나 현지 대행업체(IOR) 계약이 필수입니다.</p>
+        <p>• <b>현지 부가세 환급 불가:</b> 셀러가 부담한 현지 VAT는 현지 세무신고 자격이 없으면 매입세액 공제나 환급이 불가능하므로 원가에 고스란히 반영해야 역마진을 막을 수 있습니다.</p>
+      </div>
     </div>
+
   </div>
 </div>
 {% endblock %}
