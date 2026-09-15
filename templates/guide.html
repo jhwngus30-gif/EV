@@ -1,87 +1,278 @@
 {% extends "base.html" %}
-{% block title %}Incoterms 2020 실무 가이드 & 유의점 | CrossBorder Margin{% endblock %}
+{% block title %}Incoterms 2020 실무 유의점 & 가이드 | CrossBorder Margin{% endblock %}
 {% block content %}
-<div class="max-w-4xl mx-auto space-y-6">
-  
+<div class="max-w-5xl mx-auto space-y-8">
+
+  <!-- 상단 헤더 섹션 -->
   <div class="space-y-2">
-    <h1 class="font-serif text-3xl sm:text-4xl text-sand-900 font-normal">Incoterms 2020 Reference & Caution Points</h1>
-    <p class="text-xs sm:text-sm text-sand-700">각 조건별 핵심 정의와 실제 계약 체결 시 셀러가 반드시 점검해야 할 유의점입니다.</p>
+    <div class="inline-flex items-center gap-1.5 bg-sand-200/90 border border-sand-300/80 px-3.5 py-1 rounded-full text-xs font-semibold text-sand-800">
+      <i class="fa-solid fa-triangle-exclamation text-amber-700"></i> 무역 계약 및 정산 분쟁 방지 실무 체크포인트
+    </div>
+    <h1 class="font-serif text-3xl sm:text-4xl text-sand-900 font-normal">
+      Incoterms 2020 Practical Guide & Cautions
+    </h1>
+    <p class="text-xs sm:text-sm text-sand-700 max-w-3xl leading-relaxed">
+      인코텀즈 11개 규칙 선택 시 셀러가 반드시 점검해야 하는 <b>수출실적 증빙, 운송수단 적합성, B/L 발행, 보험 담보 수준(ICC), 현지 수입자(IOR) 및 부가세 환급 리스크</b>를 총정리했습니다.
+    </p>
   </div>
 
-  <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
-
-    <!-- EXW -->
-    <div class="bg-sand-50 border border-sand-200 rounded-3xl p-6 shadow-sm space-y-3">
-      <div class="flex items-center justify-between">
-        <span class="px-3 py-1 bg-sand-200 text-sand-800 rounded-full text-xs font-bold">EXW (공장인도)</span>
-        <span class="text-xs text-sand-700">판매자 최소 의무</span>
-      </div>
-      <h3 class="font-serif text-lg text-sand-900 font-semibold">Ex Works</h3>
-      <p class="text-xs text-sand-700 leading-relaxed">
-        공장 출고 준비만 완료하면 인도가 끝납니다. 해외 소비자가 물류사를 보낼 수 없는 D2C 온라인 채널에는 사용 불가하며 대형 B2B 납품용입니다.
-      </p>
-      <!-- 실무 유의점 -->
-      <div class="bg-sand-100/80 p-3 rounded-2xl border border-sand-200 text-[11px] text-sand-800 space-y-1">
-        <div class="font-bold text-sand-900 flex items-center gap-1"><i class="fa-solid fa-triangle-exclamation text-amber-700"></i> 실무 선택 시 유의점:</div>
-        <p>• <b>수출실적 증빙 및 영세율 적용:</b> 바이어가 지정한 포워더가 수출신고필증을 셀러에게 전달해주지 않으면 부가세 영세율이나 수출실적 인정을 못 받을 위험이 있습니다.</p>
-        <p>• <b>상차 책임:</b> 원칙상 셀러는 트럭에 짐을 실어줄 의무가 없습니다. 공장 지게차 상차 중 파손 시 분쟁이 발생하므로 계약서에 상차 책임 주체를 명기해야 합니다.</p>
-      </div>
+  <!-- 1. 계약서 작성 시 3대 핵심 체크포인트 -->
+  <div class="bg-sand-50 border border-sand-200 rounded-3xl p-6 sm:p-7 shadow-sm space-y-4">
+    <div class="border-b border-sand-200 pb-3">
+      <span class="text-[10px] font-bold tracking-wider uppercase text-sand-700 bg-sand-200 px-2.5 py-0.5 rounded-full">Contract Best Practices</span>
+      <h3 class="font-serif text-xl font-bold text-sand-900 mt-2">무역 계약서 작성 시 필수 3대 원칙</h3>
     </div>
 
-    <!-- FOB -->
-    <div class="bg-sand-50 border border-sand-200 rounded-3xl p-6 shadow-sm space-y-3">
-      <div class="flex items-center justify-between">
-        <span class="px-3 py-1 bg-sand-200 text-sand-800 rounded-full text-xs font-bold">FOB (본선인도)</span>
-        <span class="text-xs text-sand-700">해상 전통 표준</span>
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-4 text-xs">
+      <div class="bg-sand-100 p-4 rounded-2xl border border-sand-200/80 space-y-1.5">
+        <div class="w-8 h-8 rounded-full bg-sand-900 text-white flex items-center justify-center font-bold text-xs mb-2">
+          <i class="fa-solid fa-location-dot"></i>
+        </div>
+        <h4 class="font-bold text-sand-900 text-sm">1. 지정 장소의 구체적 명기</h4>
+        <p class="text-sand-700 leading-relaxed">
+          단순 항구명(<code>FOB Busan</code>) 대신 터미널 단위까지 구체적으로 적어야 분쟁을 막습니다.<br>
+          <span class="text-sand-900 font-semibold mt-1 block">예: FOB Busan Port, BPT Gamman Terminal, Korea (Incoterms 2020)</span>
+        </p>
       </div>
-      <h3 class="font-serif text-lg text-sand-900 font-semibold">Free on Board</h3>
-      <p class="text-xs text-sand-700 leading-relaxed">
-        수출항 선박의 본선에 화물이 적재될 때까지의 모든 국내 운송과 통관비용을 셀러가 부담합니다.
-      </p>
-      <!-- 실무 유의점 -->
-      <div class="bg-sand-100/80 p-3 rounded-2xl border border-sand-200 text-[11px] text-sand-800 space-y-1">
-        <div class="font-bold text-sand-900 flex items-center gap-1"><i class="fa-solid fa-triangle-exclamation text-amber-700"></i> 실무 선택 시 유의점:</div>
-        <p>• <b>선복 부족 및 데스크 지연:</b> 바이어가 선박 수배를 제때 못 하면 화물이 국내 부두 창고에 장기 체류하며 발생하는 보관료(Demurrage)를 셀러가 떠안을 수 있습니다.</p>
-        <p>• <b>항공 운송 부적합:</b> FOB는 원칙상 해상·내수로 전용입니다. 항공이나 컨테이너 CY 인도 시에는 <b>FCA 조건</b>을 사용하는 것이 공식 권장사항입니다.</p>
+
+      <div class="bg-sand-100 p-4 rounded-2xl border border-sand-200/80 space-y-1.5">
+        <div class="w-8 h-8 rounded-full bg-sand-900 text-white flex items-center justify-center font-bold text-xs mb-2">
+          <i class="fa-solid fa-calendar-check"></i>
+        </div>
+        <h4 class="font-bold text-sand-900 text-sm">2. 버전 연도 명시 (2020)</h4>
+        <p class="text-sand-700 leading-relaxed">
+          인코텀즈는 법률이 아닌 계약 당사자 합의 규칙입니다. 연도를 빠뜨리면 CIP 조건의 의무 보험 담보 수준(ICC-A vs C) 등 이전 버전(2010)과 법적 혼선이 발생합니다.
+        </p>
+      </div>
+
+      <div class="bg-sand-100 p-4 rounded-2xl border border-sand-200/80 space-y-1.5">
+        <div class="w-8 h-8 rounded-full bg-sand-900 text-white flex items-center justify-center font-bold text-xs mb-2">
+          <i class="fa-solid fa-hand-holding-dollar"></i>
+        </div>
+        <h4 class="font-bold text-sand-900 text-sm">3. 소유권과 결제 분리 규정</h4>
+        <p class="text-sand-700 leading-relaxed">
+          인코텀즈는 오직 <b>'인도, 비용, 위험'</b>만 다룹니다. 물품 소유권 이전(대금 완납 시 이전 등)과 결제 방식(L/C, T/T)은 별도 매매계약 조항으로 명문화해야 합니다.
+        </p>
       </div>
     </div>
-
-    <!-- CIF -->
-    <div class="bg-sand-50 border border-sand-200 rounded-3xl p-6 shadow-sm space-y-3">
-      <div class="flex items-center justify-between">
-        <span class="px-3 py-1 bg-sand-200 text-sand-800 rounded-full text-xs font-bold">CIF (운임·보험료포함)</span>
-        <span class="text-xs text-sand-700">비용/위험 분리</span>
-      </div>
-      <h3 class="font-serif text-lg text-sand-900 font-semibold">Cost, Insurance & Freight</h3>
-      <p class="text-xs text-sand-700 leading-relaxed">
-        도착지 항구까지의 운임과 적하보험을 셀러가 지불하지만, 화물이 본선에 실린 이후 항해 중 파손 사고 위험은 바이어에게 넘어갑니다.
-      </p>
-      <!-- 실무 유의점 -->
-      <div class="bg-sand-100/80 p-3 rounded-2xl border border-sand-200 text-[11px] text-sand-800 space-y-1">
-        <div class="font-bold text-sand-900 flex items-center gap-1"><i class="fa-solid fa-triangle-exclamation text-amber-700"></i> 실무 선택 시 유의점:</div>
-        <p>• <b>최소 담보 조건(LMA/ICC-C):</b> 규칙상 셀러는 가장 낮은 수준의 보험(C조건)만 들면 됩니다. 파손 위험이 높은 제품이라면 바이어와 협의해 전위험담보(A조건)를 계약서에 명시해야 합니다.</p>
-        <p>• <b>도착항 하역비(THC) 이중 청구:</b> 목적지 항구의 터미널 하역비가 운임에 포함되었는지 여부를 명확히 하지 않으면 바이어와 분쟁이 잦습니다.</p>
-      </div>
-    </div>
-
-    <!-- DDP -->
-    <div class="bg-sand-50 border-2 border-sand-800 rounded-3xl p-6 shadow-sm space-y-3">
-      <div class="flex items-center justify-between">
-        <span class="px-3 py-1 bg-sand-900 text-white rounded-full text-xs font-bold">DDP ★ D2C 표준</span>
-        <span class="text-xs font-bold text-sand-900">판매자 최대 의무</span>
-      </div>
-      <h3 class="font-serif text-lg text-sand-900 font-semibold">Delivered Duty Paid</h3>
-      <p class="text-xs text-sand-800 leading-relaxed font-medium">
-        목적지 수입 관세, 현지 소비세(VAT), 문앞 배송까지 전 과정을 셀러가 전액 부담합니다. 글로벌 크로스보더 전자상거래의 기본 규격입니다.
-      </p>
-      <!-- 실무 유의점 -->
-      <div class="bg-sand-200/90 p-3 rounded-2xl border border-sand-300 text-[11px] text-sand-900 space-y-1">
-        <div class="font-bold text-sand-900 flex items-center gap-1"><i class="fa-solid fa-triangle-exclamation text-rose-700"></i> 실무 선택 시 유의점:</div>
-        <p>• <b>현지 수입자(IOR) 등록:</b> 국가에 따라 현지 사업자등록증이 없는 해외 셀러의 수입신고를 거부할 수 있습니다. 특송사(DHL, FedEx)의 간이통관 대행이나 현지 대행업체(IOR) 계약이 필수입니다.</p>
-        <p>• <b>현지 부가세 환급 불가:</b> 셀러가 부담한 현지 VAT는 현지 세무신고 자격이 없으면 매입세액 공제나 환급이 불가능하므로 원가에 고스란히 반영해야 역마진을 막을 수 있습니다.</p>
-      </div>
-    </div>
-
   </div>
+
+  <!-- 2. 복합운송 7개 조건 실무 유의점 -->
+  <div class="space-y-4">
+    <div class="flex items-center justify-between border-b border-sand-200 pb-2">
+      <h3 class="font-serif text-xl font-bold text-sand-900 flex items-center gap-2">
+        <i class="fa-solid fa-truck-plane text-sand-700 text-base"></i> 모든 운송수단 사용 가능 규칙 (복합운송 7개)
+      </h3>
+      <span class="text-xs text-sand-700">카드를 누르면 그 자리에서 테두리와 뱃지가 강조됩니다</span>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs">
+      
+      <!-- EXW -->
+      <div id="card-EXW" onclick="selectCaution('EXW')" class="term-card cursor-pointer bg-sand-50 border border-sand-200 hover:border-sand-400 p-5 rounded-3xl space-y-2.5 transition-all duration-200">
+        <div class="flex justify-between items-center">
+          <span class="font-bold text-sand-900 text-sm">EXW (공장인도)</span>
+          <span id="badge-EXW" class="term-badge bg-sand-200 px-2.5 py-0.5 rounded-full text-[10px] font-semibold text-sand-800">E그룹 / 최소의무</span>
+        </div>
+        <p class="text-sand-700">셀러 사업장 구내에서 출고 준비만 하면 끝납니다. 해외 소비자가 직접 수배할 수 없어 D2C에는 부적합합니다.</p>
+        <div class="bg-sand-100 p-3 rounded-xl border border-sand-200/80 space-y-1">
+          <div class="font-bold text-amber-800 flex items-center gap-1"><i class="fa-solid fa-triangle-exclamation"></i> 실무 유의점:</div>
+          <p>• <b>수출실적 증빙 누락:</b> 바이어 포워더가 수출신고필증을 넘겨주지 않으면 부가세 영세율과 수출실적 인정을 못 받을 수 있습니다.</p>
+          <p>• <b>상차 파손 책임:</b> 원칙상 셀러는 상차 의무가 없으므로 지게차 적재 중 파손에 대비해 상차 주체를 계약서에 명기해야 합니다.</p>
+        </div>
+      </div>
+
+      <!-- FCA -->
+      <div id="card-FCA" onclick="selectCaution('FCA')" class="term-card cursor-pointer bg-sand-50 border border-sand-200 hover:border-sand-400 p-5 rounded-3xl space-y-2.5 transition-all duration-200">
+        <div class="flex justify-between items-center">
+          <span class="font-bold text-sand-900 text-sm">FCA (운송인인도)</span>
+          <span id="badge-FCA" class="term-badge bg-sand-200 px-2.5 py-0.5 rounded-full text-[10px] font-semibold text-sand-800">F그룹 / 컨테이너 표준</span>
+        </div>
+        <p class="text-sand-700">지정 장소(CY 또는 공장)에서 바이어의 운송인에게 인도하며 수출통관은 셀러가 완료합니다.</p>
+        <div class="bg-sand-100 p-3 rounded-xl border border-sand-200/80 space-y-1">
+          <div class="font-bold text-sand-900 flex items-center gap-1"><i class="fa-solid fa-circle-check text-emerald-600"></i> 실무 유의점:</div>
+          <p>• <b>L/C 선하증권(B/L) 발급:</b> Incoterms 2020 개정으로 바이어가 운송인에게 선적 선하증권(On-Board B/L)을 셀러에게 발행하도록 지시할 수 있는 메커니즘을 지원합니다.</p>
+          <p>• <b>컨테이너 화물의 공식 대안:</b> 부두 본선까지 가지 않고 CY에서 인도되므로 태풍/보관 리스크를 줄입니다.</p>
+        </div>
+      </div>
+
+      <!-- CPT -->
+      <div id="card-CPT" onclick="selectCaution('CPT')" class="term-card cursor-pointer bg-sand-50 border border-sand-200 hover:border-sand-400 p-5 rounded-3xl space-y-2.5 transition-all duration-200">
+        <div class="flex justify-between items-center">
+          <span class="font-bold text-sand-900 text-sm">CPT (운송비지급인도)</span>
+          <span id="badge-CPT" class="term-badge bg-sand-200 px-2.5 py-0.5 rounded-full text-[10px] font-semibold text-sand-800">C그룹 / 복합운송</span>
+        </div>
+        <p class="text-sand-700">목적지까지 주운송비는 셀러가 내지만, 위험은 첫 번째 운송인에게 화물을 인도하는 순간 바이어에게 넘어갑니다.</p>
+        <div class="bg-sand-100 p-3 rounded-xl border border-sand-200/80 space-y-1">
+          <div class="font-bold text-amber-800 flex items-center gap-1"><i class="fa-solid fa-triangle-exclamation"></i> 실무 유의점:</div>
+          <p>• <b>위험 이전 분기점 분쟁:</b> 운임 결제자와 파손 위험 부담자가 다르므로, 항공·철도 운송 중 화물 손상 발생 시 바이어가 대금 지급을 거절하지 못하도록 계약서에 위험 분기점을 확실히 고지해야 합니다.</p>
+        </div>
+      </div>
+
+      <!-- CIP -->
+      <div id="card-CIP" onclick="selectCaution('CIP')" class="term-card cursor-pointer bg-sand-50 border border-sand-200 hover:border-sand-400 p-5 rounded-3xl space-y-2.5 transition-all duration-200">
+        <div class="flex justify-between items-center">
+          <span class="font-bold text-sand-900 text-sm">CIP (운송비·보험료지급인도)</span>
+          <span id="badge-CIP" class="term-badge bg-sand-200 px-2.5 py-0.5 rounded-full text-[10px] font-semibold text-sand-800">C그룹 / ICC-A 의무</span>
+        </div>
+        <p class="text-sand-700">목적지까지 운임과 적하보험료를 셀러가 부담하며, 복합운송에 적합한 구조입니다.</p>
+        <div class="bg-sand-100 p-3 rounded-xl border border-sand-200/80 space-y-1">
+          <div class="font-bold text-rose-800 flex items-center gap-1"><i class="fa-solid fa-shield-halved"></i> 실무 유의점:</div>
+          <p>• <b>최고 수준 ICC(A) 의무 가입:</b> CIF(최소담보 C조건)와 달리 CIP는 전위험담보(ICC-A) 보험 가입이 강제됩니다. 고가 정밀 부품 수출 시 보험료 단가 반영을 누락하면 안 됩니다.</p>
+        </div>
+      </div>
+
+      <!-- DAP -->
+      <div id="card-DAP" onclick="selectCaution('DAP')" class="term-card cursor-pointer bg-sand-50 border border-sand-200 hover:border-sand-400 p-5 rounded-3xl space-y-2.5 transition-all duration-200">
+        <div class="flex justify-between items-center">
+          <span class="font-bold text-sand-900 text-sm">DAP (도착장소인도)</span>
+          <span id="badge-DAP" class="term-badge bg-sand-200 px-2.5 py-0.5 rounded-full text-[10px] font-semibold text-sand-800">D그룹 / 현지배송</span>
+        </div>
+        <p class="text-sand-700">목적지 지정 장소에서 양하 준비된 상태로 인도합니다. 수입통관과 관세는 바이어가 부담합니다.</p>
+        <div class="bg-sand-100 p-3 rounded-xl border border-sand-200/80 space-y-1">
+          <div class="font-bold text-amber-800 flex items-center gap-1"><i class="fa-solid fa-triangle-exclamation"></i> 실무 유의점:</div>
+          <p>• <b>바이어 통관 지연 창고료:</b> 바이어가 수입신고를 제때 안 해 현지 보세창고 보관료나 차량 대기료(Demurrage)가 발생할 경우 셀러가 면책된다는 조항을 반드시 명기해야 합니다.</p>
+        </div>
+      </div>
+
+      <!-- DPU -->
+      <div id="card-DPU" onclick="selectCaution('DPU')" class="term-card cursor-pointer bg-sand-50 border border-sand-200 hover:border-sand-400 p-5 rounded-3xl space-y-2.5 transition-all duration-200">
+        <div class="flex justify-between items-center">
+          <span class="font-bold text-sand-900 text-sm">DPU (도착지양하인도)</span>
+          <span id="badge-DPU" class="term-badge bg-sand-200 px-2.5 py-0.5 rounded-full text-[10px] font-semibold text-sand-800">D그룹 / 유일한 양하조건</span>
+        </div>
+        <p class="text-sand-700">도착지에서 셀러가 화물을 직접 차량에서 내려서(Unloaded) 인도하는 유일한 규칙입니다.</p>
+        <div class="bg-sand-100 p-3 rounded-xl border border-sand-200/80 space-y-1">
+          <div class="font-bold text-rose-800 flex items-center gap-1"><i class="fa-solid fa-crane"></i> 실무 유의점:</div>
+          <p>• <b>양하 장비 및 인명 사고 책임:</b> 지게차/크레인 하역 중 발생하는 제품 파손이나 안전사고 책임을 셀러가 지므로, 현지 포워더의 하역 인프라가 검증되지 않았다면 피해야 합니다.</p>
+        </div>
+      </div>
+
+      <!-- DDP -->
+      <div id="card-DDP" onclick="selectCaution('DDP')" class="term-card cursor-pointer bg-sand-50 border-2 border-sand-900 p-5 rounded-3xl space-y-2.5 transition-all duration-200 md:col-span-2 shadow-sm ring-2 ring-sand-300">
+        <div class="flex justify-between items-center">
+          <span class="font-bold text-sand-900 text-sm">DDP (관세지급인도) ★ 셀러 최대 의무</span>
+          <span id="badge-DDP" class="term-badge bg-sand-900 text-white px-2.5 py-0.5 rounded-full text-[10px] font-semibold">D그룹 / ★ 선택됨</span>
+        </div>
+        <p class="text-sand-700">목적지 수입통관, 관세, 현지 소비세(VAT/GST), 라스트마일 배송까지 전 과정을 셀러가 전액 부담합니다.</p>
+        <div class="bg-sand-200/80 p-3 rounded-xl border border-sand-300 text-sand-900 space-y-1">
+          <div class="font-bold text-rose-900 flex items-center gap-1"><i class="fa-solid fa-triangle-exclamation text-rose-700"></i> 필수 실무 점검 2대 사항:</div>
+          <p>• <b>현지 수입신고인(IOR) 자격:</b> 해외 법인이 없는 외국 셀러의 통관을 불허하는 국가가 많으므로 특송사(DHL/FedEx 등) 간이통관이나 현지 대행사 계약이 필수적입니다.</p>
+          <p>• <b>현지 부가세(VAT) 환급 불가 리스크:</b> 현지 세무등록이 없으면 납부한 VAT를 매입세액 공제받지 못하므로 원가에 100% 반영해야 역마진을 막을 수 있습니다.</p>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- 3. 해상 및 내수로 운송 전용 4개 규칙 실무 유의점 -->
+  <div class="space-y-4 pt-4 border-t border-sand-200">
+    <div class="flex items-center justify-between border-b border-sand-200 pb-2">
+      <h3 class="font-serif text-xl font-bold text-sand-900 flex items-center gap-2">
+        <i class="fa-solid fa-anchor text-sand-700 text-base"></i> 해상 및 내수로 전용 규칙 (4개)
+      </h3>
+      <span class="text-xs text-sand-700">컨테이너/항공 화물 시 사용 주의</span>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs">
+      
+      <!-- FAS -->
+      <div id="card-FAS" onclick="selectCaution('FAS')" class="term-card cursor-pointer bg-sand-50 border border-sand-200 hover:border-sand-400 p-5 rounded-3xl space-y-2.5 transition-all duration-200">
+        <div class="flex justify-between items-center">
+          <span class="font-bold text-sand-900 text-sm">FAS (선측인도)</span>
+          <span id="badge-FAS" class="term-badge bg-sand-200 px-2.5 py-0.5 rounded-full text-[10px] font-semibold text-sand-800">F그룹 / 선박 옆 인도</span>
+        </div>
+        <p class="text-sand-700">선적항 부두의 본선 선측(부두 또는 바지선)에 화물을 둘 때 인도가 끝납니다.</p>
+        <div class="bg-sand-100 p-3 rounded-xl border border-sand-200/80 space-y-1">
+          <div class="font-bold text-amber-800 flex items-center gap-1"><i class="fa-solid fa-triangle-exclamation"></i> 실무 유의점:</div>
+          <p>• <b>크레인 인양 전 파손:</b> 본선 크레인으로 끌어올리기 직전까지가 셀러 책임이므로, 벌크 화물이 아닌 컨테이너 화물에는 쓰지 않습니다.</p>
+        </div>
+      </div>
+
+      <!-- FOB -->
+      <div id="card-FOB" onclick="selectCaution('FOB')" class="term-card cursor-pointer bg-sand-50 border border-sand-200 hover:border-sand-400 p-5 rounded-3xl space-y-2.5 transition-all duration-200">
+        <div class="flex justify-between items-center">
+          <span class="font-bold text-sand-900 text-sm">FOB (본선인도) ★ 전통 해상 표준</span>
+          <span id="badge-FOB" class="term-badge bg-sand-200 px-2.5 py-0.5 rounded-full text-[10px] font-semibold text-sand-800">F그룹 / 본선 적재</span>
+        </div>
+        <p class="text-sand-700">선적항 선박 본선(On Board)에 화물이 완전히 실릴 때 위험이 바이어에게 넘어갑니다.</p>
+        <div class="bg-sand-100 p-3 rounded-xl border border-sand-200/80 space-y-1">
+          <div class="font-bold text-amber-800 flex items-center gap-1"><i class="fa-solid fa-triangle-exclamation"></i> 실무 유의점:</div>
+          <p>• <b>컨테이너 야드(CY) 보관 리스크:</b> 화물이 CY에 반입된 후 본선에 실리기 전 태풍이나 화재로 손상되면 셀러가 독박을 씁니다. <b>컨테이너는 FCA 조건 전환</b>이 공식 권고입니다.</p>
+          <p>• <b>선박 지연 체선료:</b> 바이어가 지정한 선박 입항이 지연되어 발생하는 부두 창고 보관료 분쟁에 대비해야 합니다.</p>
+        </div>
+      </div>
+
+      <!-- CFR -->
+      <div id="card-CFR" onclick="selectCaution('CFR')" class="term-card cursor-pointer bg-sand-50 border border-sand-200 hover:border-sand-400 p-5 rounded-3xl space-y-2.5 transition-all duration-200">
+        <div class="flex justify-between items-center">
+          <span class="font-bold text-sand-900 text-sm">CFR (운임포함인도)</span>
+          <span id="badge-CFR" class="term-badge bg-sand-200 px-2.5 py-0.5 rounded-full text-[10px] font-semibold text-sand-800">C그룹 / 해상운임 지급</span>
+        </div>
+        <p class="text-sand-700">목적항까지 해상운임은 셀러가 내지만, 보험은 바이어가 들고 위험도 선적 시 넘어갑니다.</p>
+        <div class="bg-sand-100 p-3 rounded-xl border border-sand-200/80 space-y-1">
+          <div class="font-bold text-amber-800 flex items-center gap-1"><i class="fa-solid fa-triangle-exclamation"></i> 실무 유의점:</div>
+          <p>• <b>신속한 선적 통지(Shipping Notice):</b> 셀러가 선적 직후 선적 통지를 지연하여 바이어가 적하보험을 제때 가입하지 못한 상태에서 사고가 나면 셀러에게 배상 책임이 생깁니다.</p>
+        </div>
+      </div>
+
+      <!-- CIF -->
+      <div id="card-CIF" onclick="selectCaution('CIF')" class="term-card cursor-pointer bg-sand-50 border border-sand-200 hover:border-sand-400 p-5 rounded-3xl space-y-2.5 transition-all duration-200">
+        <div class="flex justify-between items-center">
+          <span class="font-bold text-sand-900 text-sm">CIF (운임·보험료포함) ★ L/C 거래 대표</span>
+          <span id="badge-CIF" class="term-badge bg-sand-200 px-2.5 py-0.5 rounded-full text-[10px] font-semibold text-sand-800">C그룹 / 최소담보 보험</span>
+        </div>
+        <p class="text-sand-700">목적항까지 해상운임과 적하보험료를 셀러가 부담하는 대표적인 무역 조건입니다.</p>
+        <div class="bg-sand-100 p-3 rounded-xl border border-sand-200/80 space-y-1">
+          <div class="font-bold text-sand-900 flex items-center gap-1"><i class="fa-solid fa-triangle-exclamation text-amber-700"></i> 실무 유의점:</div>
+          <p>• <b>최소 담보 조건(ICC-C):</b> 기본 의무는 최하위 담보인 C조건(침몰/좌초 등)뿐입니다. 파손 위험 화물은 바이어와 A조건(전위험담보) 합의를 계약서에 넣어야 합니다.</p>
+          <p>• <b>도착항 하역비(THC) 이중청구:</b> 해상운임에 도착항 양하비가 포함되었는지 확인하여 바이어 클레임을 방지해야 합니다.</p>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
 </div>
+
+<script>
+  const BADGE_DEFAULT_TEXT = {
+    EXW: "E그룹 / 최소의무",
+    FCA: "F그룹 / 컨테이너 표준",
+    CPT: "C그룹 / 복합운송",
+    CIP: "C그룹 / ICC-A 의무",
+    DAP: "D그룹 / 현지배송",
+    DPU: "D그룹 / 유일한 양하조건",
+    DDP: "D그룹 / 통관세율 전액부담",
+    FAS: "F그룹 / 선박 옆 인도",
+    FOB: "F그룹 / 본선 적재",
+    CFR: "C그룹 / 해상운임 지급",
+    CIF: "C그룹 / 최소담보 보험"
+  };
+
+  function selectCaution(term) {
+    // 1. 모든 카드의 스타일을 기본 상태로 초기화
+    document.querySelectorAll('.term-card').forEach(card => {
+      card.className = "term-card cursor-pointer bg-sand-50 border border-sand-200 hover:border-sand-400 p-5 rounded-3xl space-y-2.5 transition-all duration-200";
+    });
+
+    document.querySelectorAll('.term-badge').forEach(badge => {
+      const cardId = badge.id.replace('badge-', '');
+      badge.className = "term-badge bg-sand-200 px-2.5 py-0.5 rounded-full text-[10px] font-semibold text-sand-800";
+      badge.innerText = BADGE_DEFAULT_TEXT[cardId] || "무역 조건";
+    });
+
+    // 2. 클릭한 카드만 제자리에서 진한 테두리와 뱃지로 즉각 강조
+    const activeCard = document.getElementById(`card-${term}`);
+    const activeBadge = document.getElementById(`badge-${term}`);
+
+    if (activeCard && activeBadge) {
+      activeCard.className = "term-card cursor-pointer bg-sand-50 border-2 border-sand-900 p-5 rounded-3xl space-y-2.5 transition-all duration-200 shadow-lg ring-2 ring-sand-300";
+      activeBadge.className = "term-badge bg-sand-900 text-white px-2.5 py-0.5 rounded-full text-[10px] font-semibold";
+      activeBadge.innerText = "★ 선택됨";
+    }
+
+    // 💡 window.scrollTo를 완전히 제거하여 화면이 위로 튕기지 않고 보고 있던 자리에 고정됩니다.
+  }
+</script>
 {% endblock %}

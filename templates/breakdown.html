@@ -1,60 +1,192 @@
 {% extends "base.html" %}
-{% block title %}원가명세서 | CrossBorder Margin{% endblock %}
+{% block title %}공식 수출 원가명세서 (Cost Breakdown Sheet) | CrossBorder Margin{% endblock %}
 {% block content %}
-<div class="max-w-4xl mx-auto bg-sand-50 border border-sand-200 rounded-3xl p-6 sm:p-10 shadow-sm space-y-6">
-  <div class="flex flex-wrap items-center justify-between border-b border-sand-200 pb-5 gap-3">
-    <div>
-      <span class="text-[11px] font-semibold tracking-wider uppercase text-sand-700">Official Export Statement</span>
-      <h1 class="font-serif text-2xl sm:text-3xl text-sand-900 font-semibold mt-1">D2C 크로스보더 표준 원가명세서</h1>
+<style>
+  @media print {
+    body * { visibility: hidden; }
+    #printableSheetBox, #printableSheetBox * { visibility: visible; }
+    #printableSheetBox {
+      position: absolute; left: 0; top: 0; width: 100% !important;
+      border: 1px solid #000 !important; box-shadow: none !important;
+      padding: 20px !important; background: #fff !important;
+    }
+    .no-print { display: none !important; }
+  }
+</style>
+
+<div class="max-w-5xl mx-auto space-y-8">
+
+  <!-- 1. 원가명세서의 의미와 실무 목적 (인쇄 시 숨김) -->
+  <div class="no-print bg-sand-50 border border-sand-200 rounded-3xl p-6 sm:p-8 shadow-sm space-y-5">
+    <div class="border-b border-sand-200 pb-3">
+      <span class="text-[11px] font-bold tracking-wider uppercase text-sand-700">Guide & Knowledge</span>
+      <h2 class="font-serif text-2xl sm:text-3xl text-sand-900 font-semibold mt-1">
+        Q. 무역 원가명세서(Cost Breakdown Sheet)는 어떤 역할을 하나요?
+      </h2>
+      <p class="text-xs sm:text-sm text-sand-700 mt-1">
+        B2B 바이어와의 무역 계약 견적(Quotation/Proforma Invoice) 작성 및 세관 수입신고 시 <b>"어디까지가 제품 순수 가격이고, 어디서부터가 운송비와 관세인가?"</b>를 공식 증명하는 내역서입니다.
+      </p>
     </div>
-    <button onclick="window.print()" class="px-4 py-2 bg-sand-200/80 hover:bg-sand-200 rounded-full text-xs font-semibold text-sand-800 transition flex items-center gap-1.5">
-      <i class="fa-solid fa-print text-xs"></i> 명세서 인쇄
-    </button>
+
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-4 text-xs">
+      <div class="bg-sand-100 p-4 rounded-2xl border border-sand-200/80 space-y-1.5">
+        <div class="w-8 h-8 rounded-full bg-sand-900 text-white flex items-center justify-center font-bold text-xs mb-2">
+          <i class="fa-solid fa-shield"></i>
+        </div>
+        <h4 class="font-bold text-sand-900 text-sm">1. 내부 마진 방어</h4>
+        <p class="text-sand-700 leading-relaxed">
+          국제 유가나 환율이 급변해도, 순수 공장도 제조 마진이 훼손되지 않도록 정확한 가격 방어 기준선을 제시합니다.
+        </p>
+      </div>
+
+      <div class="bg-sand-100 p-4 rounded-2xl border border-sand-200/80 space-y-1.5">
+        <div class="w-8 h-8 rounded-full bg-sand-900 text-white flex items-center justify-center font-bold text-xs mb-2">
+          <i class="fa-solid fa-handshake"></i>
+        </div>
+        <h4 class="font-bold text-sand-900 text-sm">2. 바이어 견적·협상 근거</h4>
+        <p class="text-sand-700 leading-relaxed">
+          "공장 출고가(EXW) 기준 $12이지만, 본선 선적(FOB) 시 통관비가 붙어 $14.5가 됩니다"처럼 조건 변경에 따른 투명한 견적 근거를 제공합니다.
+        </p>
+      </div>
+
+      <div class="bg-sand-100 p-4 rounded-2xl border border-sand-200/80 space-y-1.5">
+        <div class="w-8 h-8 rounded-full bg-sand-900 text-white flex items-center justify-center font-bold text-xs mb-2">
+          <i class="fa-solid fa-stamp"></i>
+        </div>
+        <h4 class="font-bold text-sand-900 text-sm">3. 세관 과세표준(CIF) 산정</h4>
+        <p class="text-sand-700 leading-relaxed">
+          해외 관세청에 수입신고할 때 관세가 부과되는 CIF 과세가격을 투명하게 산출하여 언더밸류 의혹이나 관세 과다 부과를 예방합니다.
+        </p>
+      </div>
+    </div>
   </div>
 
-  <div class="overflow-x-auto">
-    <table class="w-full text-left border-collapse text-xs sm:text-sm">
-      <thead>
-        <tr class="border-b border-sand-200 text-sand-700 font-medium">
-          <th class="py-3 px-2">단계</th>
-          <th class="py-3 px-2">세부 항목</th>
-          <th class="py-3 px-2">책임 주체</th>
-          <th class="py-3 px-2 text-right">인도/위험 분기점</th>
-        </tr>
-      </thead>
-      <tbody class="divide-y divide-sand-200 text-sand-800">
-        <tr>
-          <td class="py-3 px-2 font-serif font-bold text-sand-900">EXW</td>
-          <td class="py-3 px-2">순수 제조원가, 바코드/라벨링, 수출 포장비</td>
-          <td class="py-3 px-2 text-sand-700">셀러(제조사)</td>
-          <td class="py-3 px-2 text-right text-sand-700">공장 출고</td>
-        </tr>
-        <tr>
-          <td class="py-3 px-2 font-serif font-bold text-sand-900">FOB</td>
-          <td class="py-3 px-2">수출 통관 수수료, 국내 보세운송, 항만 하역비(THC)</td>
-          <td class="py-3 px-2 text-sand-700">수출 셀러</td>
-          <td class="py-3 px-2 text-right text-sand-700">본선 적재</td>
-        </tr>
-        <tr>
-          <td class="py-3 px-2 font-serif font-bold text-sand-900">CIF</td>
-          <td class="py-3 px-2">국제 해상/항공 운임(Freight), 적하보험료</td>
-          <td class="py-3 px-2 text-sand-700">비용은 셀러 / 위험은 바이어</td>
-          <td class="py-3 px-2 text-right text-sand-700">출항지 본선</td>
-        </tr>
-        <tr class="bg-sand-100/60 font-medium">
-          <td class="py-3 px-2 font-serif font-bold text-sand-900">DDP</td>
-          <td class="py-3 px-2">도착지 수입 관세, 현지 부가세/소비세, 라스트마일 배송</td>
-          <td class="py-3 px-2 text-sand-900 font-bold">수출 셀러 전액</td>
-          <td class="py-3 px-2 text-right text-sand-900 font-bold">현지 문앞 수령</td>
-        </tr>
-        <tr>
-          <td class="py-3 px-2 font-serif font-bold text-sand-900">운영/정산</td>
-          <td class="py-3 px-2">쇼피/아마존 수수료, PG 결제망, 환전 스프레드, 반품 손실</td>
-          <td class="py-3 px-2 text-sand-700">셀러 매출에서 공제</td>
-          <td class="py-3 px-2 text-right text-sand-700">국내 계좌 입금</td>
-        </tr>
-      </tbody>
-    </table>
+  <!-- 2. [인쇄 대상] 실시간 시뮬레이션 기반 '공식 무역 원가명세서' -->
+  <div id="printableSheetBox" class="bg-sand-50 border-2 border-sand-800 rounded-3xl p-6 sm:p-10 shadow-lg space-y-6">
+    <div class="flex flex-wrap items-center justify-between border-b border-sand-200 pb-5 gap-3">
+      <div>
+        <div class="flex items-center gap-2">
+          <span id="sheetTermTag" class="text-xs font-bold uppercase tracking-wider bg-sand-900 text-white px-3 py-1 rounded-full">FOB 조건</span>
+          <span id="sheetModeTag" class="text-xs font-semibold bg-sand-200 text-sand-800 px-3 py-1 rounded-full">B2B 일반수출</span>
+        </div>
+        <h2 class="font-serif text-2xl sm:text-3xl text-sand-900 font-bold mt-2">
+          Export Cost Breakdown Sheet (수출 원가명세서)
+        </h2>
+        <p class="text-xs text-sand-700 mt-1" id="sheetTimestamp">작성 기준일: 동기화 중...</p>
+      </div>
+      <button onclick="window.print()" class="no-print px-5 py-2.5 bg-sand-900 hover:bg-black text-white rounded-full text-xs font-bold transition flex items-center gap-2 shadow-md">
+        <i class="fa-solid fa-print text-sm"></i>
+        <span>이 명세서 PDF 인쇄 / 출력</span>
+      </button>
+    </div>
+
+    <!-- 원가명세서 본문 테이블 -->
+    <div class="overflow-x-auto">
+      <table class="w-full text-left border-collapse text-xs sm:text-sm">
+        <thead>
+          <tr class="bg-sand-100 border-b border-sand-300 text-sand-900 font-bold">
+            <th class="py-3.5 px-4">비용 항목 구분</th>
+            <th class="py-3.5 px-4 text-right">금액 (KRW ₩)</th>
+            <th class="py-3.5 px-4 text-right">환산 금액 (USD $)</th>
+            <th class="py-3.5 px-4 text-right">비용 구성비</th>
+          </tr>
+        </thead>
+        <tbody id="sheetRows" class="divide-y divide-sand-200 text-sand-800">
+          <!-- JS 동적 렌더링 -->
+        </tbody>
+        <tfoot id="sheetFooter" class="border-t-2 border-sand-800 bg-sand-100/80 text-sand-900 font-bold">
+          <!-- 합계 및 순마진 렌더링 -->
+        </tfoot>
+      </table>
+    </div>
+
+    <!-- 하단 확인 및 비고 -->
+    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-4 text-xs text-sand-700 border-t border-sand-200">
+      <div>
+        <span class="font-bold text-sand-900">비고 및 무역 준수사항 (Remarks):</span>
+        <p class="mt-1 leading-relaxed">
+          본 명세서는 국제상업회의소(ICC) Incoterms 2020 규칙에 따라 위험 이전 분기점과 셀러 부담 원가만을 공제하여 정산한 정식 가격 산출 내역입니다.
+        </p>
+      </div>
+      <div class="text-right sm:self-end">
+        <span class="font-serif italic text-sand-900 font-bold text-base">Global Trade & Incoterms Certified</span>
+      </div>
+    </div>
   </div>
+
 </div>
+
+<script>
+  window.addEventListener('DOMContentLoaded', () => {
+    const raw = localStorage.getItem("lastSimulationData");
+    const tbody = document.getElementById("sheetRows");
+    const tfoot = document.getElementById("sheetFooter");
+
+    if (!raw) {
+      tbody.innerHTML = `<tr><td colspan="4" class="py-8 text-center text-sand-700">메인 시뮬레이터에서 계산을 실행하시면 이곳에 공식 원가명세서가 자동으로 생성됩니다.</td></tr>`;
+      return;
+    }
+
+    const data = JSON.parse(raw);
+    const rate = data.rate || 1360;
+    const revKrw = data.gross_rev_krw || 0;
+    const term = data.incoterm || "FOB";
+    const mode = data.trade_mode === "ECOMMERCE" ? "크로스보더 D2C" : "B2B 일반수출";
+
+    document.getElementById("sheetTermTag").innerText = `${term} 조건 계약`;
+    document.getElementById("sheetModeTag").innerText = mode;
+    if (data.timestamp) {
+      document.getElementById("sheetTimestamp").innerText = `작성 기준일: ${data.timestamp} (기준환율: 1 USD = ${rate.toLocaleString()} KRW)`;
+    }
+
+    const formatKrw = (num) => Math.round(num).toLocaleString() + ' ₩';
+    const formatUsd = (num) => '$' + (num / rate).toFixed(2);
+    const getRatio = (num) => revKrw > 0 ? ((num / revKrw) * 100).toFixed(1) + '%' : '0.0%';
+
+    const items = [
+      { name: "1. 순수 제조원가 + 수출 포장비 (EXW)", val: data.cost_items.exw },
+      { name: "2. 국내 보세운송 + 수출통관 수수료 (FOB/FCA)", val: data.cost_items.local_trans },
+      { name: "3. 국제 주운송 운임 (해상/항공)", val: data.cost_items.intl_freight },
+      { name: "4. 적하보험료 (ICC 증권)", val: data.cost_items.insurance },
+      { name: "5. 도착지 내륙배송 및 양하비용", val: data.cost_items.dest_delivery + data.cost_items.dest_unloading },
+      { name: "6. 수입 관부가세 (DDP 조건 셀러 납부)", val: data.cost_items.tariff + data.cost_items.vat },
+      { name: data.trade_mode === 'ECOMMERCE' ? "7. 플랫폼 수수료 및 반품 충당금" : "7. 은행 L/C 결제 및 외환 송금 수수료", val: data.operating_fees }
+    ];
+
+    let rowsHtml = "";
+    items.filter(i => i.val > 0).forEach(i => {
+      rowsHtml += `
+        <tr class="hover:bg-sand-100/50">
+          <td class="py-3 px-4 font-medium text-sand-900">${i.name}</td>
+          <td class="py-3 px-4 text-right font-semibold">${formatKrw(i.val)}</td>
+          <td class="py-3 px-4 text-right text-sand-700">${formatUsd(i.val)}</td>
+          <td class="py-3 px-4 text-right font-bold text-sand-800">${getRatio(i.val)}</td>
+        </tr>
+      `;
+    });
+    tbody.innerHTML = rowsHtml;
+
+    const totalExpense = data.seller_cost_total + data.operating_fees;
+    tfoot.innerHTML = `
+      <tr>
+        <td class="py-3.5 px-4 text-sand-900">셀러 총 비용 합계 (${term} 조건 총 원가)</td>
+        <td class="py-3.5 px-4 text-right text-rose-800">${formatKrw(totalExpense)}</td>
+        <td class="py-3.5 px-4 text-right text-rose-800">${formatUsd(totalExpense)}</td>
+        <td class="py-3.5 px-4 text-right text-rose-800">${getRatio(totalExpense)}</td>
+      </tr>
+      <tr class="bg-sand-200/90 text-sm">
+        <td class="py-4 px-4 font-extrabold text-sand-900">계약 체결 단가 / 최종 매출 (Contract Amount)</td>
+        <td class="py-4 px-4 text-right font-bold text-sand-900">${formatKrw(revKrw)}</td>
+        <td class="py-4 px-4 text-right font-bold text-sand-900">${formatUsd(revKrw)}</td>
+        <td class="py-4 px-4 text-right font-bold text-sand-900">100.0%</td>
+      </tr>
+      <tr class="bg-sand-900 text-white">
+        <td class="py-4 px-4 font-bold">셀러 최종 순이익 (Net Margin)</td>
+        <td class="py-4 px-4 text-right font-bold font-serif text-base">${formatKrw(data.net_profit_krw)}</td>
+        <td class="py-4 px-4 text-right font-bold font-serif text-base">${formatUsd(data.net_profit_krw)}</td>
+        <td class="py-4 px-4 text-right font-bold font-serif text-base text-emerald-300">${data.margin_rate}%</td>
+      </tr>
+    `;
+  });
+</script>
 {% endblock %}

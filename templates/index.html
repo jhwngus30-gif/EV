@@ -2,47 +2,88 @@
 {% block content %}
 <div class="space-y-8">
 
-  <!-- 인트로 및 화폐 토글 스위처 -->
+  <!-- 상단 인트로 & 글로벌 인코텀즈 모드 설정 바 -->
   <div class="flex flex-wrap items-center justify-between gap-4">
     <div class="space-y-2">
       <div class="inline-flex items-center gap-2 bg-sand-200/80 border border-sand-300/70 px-4 py-1 rounded-full text-xs text-sand-800">
-        <i class="fa-solid fa-calculator text-sand-700"></i>
-        <span>글로벌 D2C 수출 원가 & Incoterms 조건별 마진 계산기</span>
+        <i class="fa-solid fa-ship text-sand-700"></i>
+        <span>Incoterms 2020 공식 11개 규칙 기반 통합 무역 마진 시뮬레이터</span>
       </div>
       <h1 class="font-serif text-3xl sm:text-5xl font-normal tracking-tight text-sand-900">
-        Global D2C Pricing & Margins
+        Global Trade Pricing & Margin Engine
       </h1>
+      <p class="text-xs sm:text-sm text-sand-700 max-w-2xl">
+        선택한 무역 조건에 따라 위험 이전 시점과 셀러의 원가 부담 범위를 동적으로 분석하여 순마진과 바이어 권장 견적가를 산출합니다.
+      </p>
     </div>
 
-    <!-- 통화 단위 선택 토글 (KRW vs USD) -->
-    <div class="bg-sand-50 border border-sand-200 p-1.5 rounded-full flex items-center gap-1 shadow-sm">
-      <span class="text-xs font-semibold px-3 text-sand-700">입력 통화:</span>
-      <button id="btnCurrencyKRW" onclick="setCurrency('KRW')" class="px-4 py-1.5 rounded-full text-xs font-bold transition bg-sand-900 text-white shadow-sm">
-        KRW (₩)
-      </button>
-      <button id="btnCurrencyUSD" onclick="setCurrency('USD')" class="px-4 py-1.5 rounded-full text-xs font-bold transition text-sand-700 hover:text-sand-900">
-        USD ($)
-      </button>
+    <!-- 컨트롤 스위치 (거래 모드 및 통화) -->
+    <div class="flex flex-wrap items-center gap-2">
+      <!-- 거래 유형 선택 (B2B 전통무역 vs 글로벌 이커머스) -->
+      <div class="bg-sand-50 border border-sand-200 p-1 rounded-full flex items-center shadow-sm text-xs">
+        <button id="btnModeB2B" onclick="setTradeMode('B2B')" class="px-3.5 py-1.5 rounded-full font-bold bg-sand-900 text-white transition shadow-sm">
+          B2B 일반수출
+        </button>
+        <button id="btnModeEcom" onclick="setTradeMode('ECOMMERCE')" class="px-3.5 py-1.5 rounded-full font-bold text-sand-700 hover:text-sand-900 transition">
+          크로스보더 D2C
+        </button>
+      </div>
+
+      <!-- 통화 선택 (KRW vs USD) -->
+      <div class="bg-sand-50 border border-sand-200 p-1 rounded-full flex items-center shadow-sm text-xs">
+        <button id="btnCurrencyKRW" onclick="setCurrency('KRW')" class="px-3.5 py-1.5 rounded-full font-bold bg-sand-900 text-white transition shadow-sm">
+          KRW (₩)
+        </button>
+        <button id="btnCurrencyUSD" onclick="setCurrency('USD')" class="px-3.5 py-1.5 rounded-full font-bold text-sand-700 hover:text-sand-900 transition">
+          USD ($)
+        </button>
+      </div>
     </div>
   </div>
 
-  <!-- 메인 그리드 레이아웃 -->
+  <!-- 메인 대시보드 레이아웃 -->
   <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
 
-    <!-- 좌측 원가 파라미터 폼 -->
+    <!-- 좌측: 조건 선택 & 원가 입력 패널 (5 cols) -->
     <div class="lg:col-span-5 bg-sand-50 border border-sand-200 rounded-3xl p-6 shadow-sm space-y-6">
-      <div class="flex items-center justify-between border-b border-sand-200 pb-3">
-        <h3 class="font-serif italic text-lg text-sand-900 font-semibold">Pricing & Cost Setup</h3>
-        <span id="currBadge" class="text-xs bg-sand-200 px-2.5 py-1 rounded-full font-bold text-sand-800">원화(KRW) 기준</span>
+      
+      <!-- 1. 핵심: Incoterms 2020 조건 선택 드롭다운 -->
+      <div class="space-y-2">
+        <div class="flex justify-between items-center">
+          <label class="font-serif italic text-base text-sand-900 font-semibold flex items-center gap-1.5">
+            <i class="fa-solid fa-file-contract text-sand-700"></i> 적용 계약 조건 (Incoterms 2020)
+          </label>
+          <span id="transportTypeBadge" class="text-[11px] bg-sand-200 text-sand-800 px-2.5 py-0.5 rounded-full font-medium">해상·내수로 전용</span>
+        </div>
+        <select id="incotermSelect" onchange="onTermChange()" class="w-full bg-sand-100 border border-sand-300 rounded-2xl px-4 py-2.5 text-sm font-bold text-sand-900 focus:outline-none focus:border-sand-800 cursor-pointer">
+          <optgroup label="[복합운송] 모든 운송 수단 사용 가능">
+            <option value="EXW">EXW - 공장 인도 (Ex Works)</option>
+            <option value="FCA">FCA - 운송인 인도 (Free Carrier)</option>
+            <option value="CPT">CPT - 운송비 지급 인도 (Carriage Paid To)</option>
+            <option value="CIP">CIP - 운송비·보험료 지급 인도 (Carriage and Insurance Paid To)</option>
+            <option value="DAP">DAP - 도착장소 인도 (Delivered at Place)</option>
+            <option value="DPU">DPU - 도착지 양하 인도 (Delivered at Place Unloaded)</option>
+            <option value="DDP">DDP - 관세 지급 인도 (Delivered Duty Paid)</option>
+          </optgroup>
+          <optgroup label="[해상운송] 해상 및 내수로 운송 전용">
+            <option value="FAS">FAS - 선측 인도 (Free Alongside Ship)</option>
+            <option value="FOB" selected>FOB - 본선 인도 (Free on Board) ★ 표준</option>
+            <option value="CFR">CFR - 운임 포함 인도 (Cost and Freight)</option>
+            <option value="CIF">CIF - 운임·보험료 포함 인도 (Cost, Insurance and Freight) ★</option>
+          </optgroup>
+        </select>
+        <p id="termRuleDesc" class="text-[11px] text-sand-700 bg-sand-100 p-2.5 rounded-xl border border-sand-200/60 leading-relaxed">
+          선적항의 본선에 화물이 적재될 때 위험이 바이어에게 이전되며, 국내 통관 및 내륙 운송까지 셀러가 부담합니다.
+        </p>
       </div>
 
-      <!-- 판매가 & 환율 -->
-      <div class="grid grid-cols-2 gap-3 text-xs">
+      <!-- 2. 계약 판매 단가 & 적용 환율 -->
+      <div class="grid grid-cols-2 gap-3 text-xs pt-3 border-t border-sand-200">
         <div>
           <label class="block font-semibold text-sand-800 mb-1">
-            목표 판매가 (<span class="unitLabel">$</span>)
+            계약/판매 단가 (<span class="unitLabel">₩</span>)
           </label>
-          <input type="number" id="target_price" value="39.0" step="0.5" class="w-full bg-sand-100 border border-sand-200 rounded-xl px-3 py-2 text-sm font-semibold text-sand-900 focus:outline-none focus:border-sand-800">
+          <input type="number" id="target_price" value="53000" step="500" class="w-full bg-sand-100 border border-sand-200 rounded-xl px-3 py-2 text-sm font-semibold text-sand-900 focus:outline-none focus:border-sand-800">
         </div>
         <div>
           <label class="block font-semibold text-sand-800 mb-1">기준 환율 (₩/USD)</label>
@@ -50,111 +91,143 @@
         </div>
       </div>
 
-      <!-- 제조 및 물류 원가 -->
-      <div class="space-y-3 pt-2 border-t border-sand-200">
-        <span class="text-xs font-bold text-sand-900 flex items-center gap-1.5">
-          <i class="fa-solid fa-box text-sand-700"></i> 제조 및 운송 원가 (<span class="unitLabel">₩</span>)
+      <!-- 3. 원가 항목 (조건에 따라 자동 연동/음영 처리) -->
+      <div class="space-y-3 pt-3 border-t border-sand-200">
+        <span class="text-xs font-bold text-sand-900 flex items-center justify-between">
+          <span><i class="fa-solid fa-boxes-stacked text-sand-700 mr-1"></i> 단계별 세부 원가 (<span class="unitLabel">₩</span>)</span>
+          <span class="text-[10px] font-normal text-sand-700">*조건 외 항목은 셀러 원가에서 자동 제외</span>
         </span>
+        
         <div class="grid grid-cols-2 gap-3 text-xs">
+          <!-- 항상 셀러 부담 -->
           <div>
-            <label class="block text-sand-700 mb-1">공장도가 (EXW <span class="unitLabel">₩</span>)</label>
+            <label class="block text-sand-700 mb-1">제품 제조원가 (EXW <span class="unitLabel">₩</span>)</label>
             <input type="number" id="exw_val" value="15000" class="w-full bg-sand-100 border border-sand-200 rounded-xl px-3 py-2 text-sand-900">
           </div>
           <div>
-            <label class="block text-sand-700 mb-1">포장/라벨링 (<span class="unitLabel">₩</span>)</label>
+            <label class="block text-sand-700 mb-1">수출 포장/라벨링 (<span class="unitLabel">₩</span>)</label>
             <input type="number" id="pack_val" value="1200" class="w-full bg-sand-100 border border-sand-200 rounded-xl px-3 py-2 text-sand-900">
           </div>
-          <div>
-            <label class="block text-sand-700 mb-1">내륙운송/통관 (<span class="unitLabel">₩</span>)</label>
+
+          <!-- 국내 운송/통관 (FOB, FCA 등) -->
+          <div id="field_local_trans">
+            <label class="block text-sand-700 mb-1">국내운송·수출통관 (<span class="unitLabel">₩</span>)</label>
             <input type="number" id="local_trans_val" value="2500" class="w-full bg-sand-100 border border-sand-200 rounded-xl px-3 py-2 text-sand-900">
           </div>
-          <div>
-            <label class="block text-sand-700 mb-1">해상/항공 운임 (<span class="unitLabel">₩</span>)</label>
+
+          <!-- 국제 해상/항공 운임 (CFR, CIF, CPT, D그룹 등) -->
+          <div id="field_intl_freight">
+            <label class="block text-sand-700 mb-1">국제 주운송 운임 (<span class="unitLabel">₩</span>)</label>
             <input type="number" id="intl_freight_val" value="6500" class="w-full bg-sand-100 border border-sand-200 rounded-xl px-3 py-2 text-sand-900">
           </div>
-        </div>
-      </div>
 
-      <!-- 관세 및 플랫폼 수수료율 -->
-      <div class="space-y-3 pt-2 border-t border-sand-200">
-        <span class="text-xs font-bold text-sand-900 flex items-center gap-1.5">
-          <i class="fa-solid fa-receipt text-sand-700"></i> 관부가세 및 플랫폼 공제율 (%)
-        </span>
-        <div class="grid grid-cols-2 gap-3 text-xs">
-          <div>
+          <!-- 적하보험료 (CIF, CIP, D그룹) -->
+          <div id="field_insurance">
+            <label class="block text-sand-700 mb-1">적하보험료 (<span class="unitLabel">₩</span>)</label>
+            <input type="number" id="insurance_val" value="800" class="w-full bg-sand-100 border border-sand-200 rounded-xl px-3 py-2 text-sand-900">
+          </div>
+
+          <!-- 도착지 내륙배송 (DAP, DPU, DDP) -->
+          <div id="field_dest_delivery">
+            <label class="block text-sand-700 mb-1">도착지 내륙운송 (<span class="unitLabel">₩</span>)</label>
+            <input type="number" id="dest_delivery_val" value="3000" class="w-full bg-sand-100 border border-sand-200 rounded-xl px-3 py-2 text-sand-900">
+          </div>
+
+          <!-- 도착지 양하작업비 (DPU 전용) -->
+          <div id="field_dest_unloading">
+            <label class="block text-sand-700 mb-1">현지 양하비용 (DPU <span class="unitLabel">₩</span>)</label>
+            <input type="number" id="dest_unloading_val" value="1500" class="w-full bg-sand-100 border border-sand-200 rounded-xl px-3 py-2 text-sand-900">
+          </div>
+
+          <!-- 수입 관세/부가세 (DDP 전용) -->
+          <div id="field_duty">
             <label class="block text-sand-700 mb-1">수입 관세율 (%)</label>
             <input type="number" id="duty_rate" value="8" step="0.5" class="w-full bg-sand-100 border border-sand-200 rounded-xl px-3 py-2 text-sand-900">
           </div>
+        </div>
+      </div>
+
+      <!-- 4. 이커머스 전용 공제율 (이커머스 모드 선택 시 활성화) -->
+      <div id="ecomFieldsBox" class="hidden space-y-3 pt-3 border-t border-sand-200">
+        <span class="text-xs font-bold text-sand-900 flex items-center gap-1.5">
+          <i class="fa-solid fa-store text-sand-700"></i> 이커머스 플랫폼 정산 공제율 (%)
+        </span>
+        <div class="grid grid-cols-2 gap-3 text-xs">
           <div>
-            <label class="block text-sand-700 mb-1">현지 부가세율 (%)</label>
-            <input type="number" id="vat_rate" value="10" step="0.5" class="w-full bg-sand-100 border border-sand-200 rounded-xl px-3 py-2 text-sand-900">
-          </div>
-          <div>
-            <label class="block text-sand-700 mb-1">플랫폼 수수료 (%)</label>
+            <label class="block text-sand-700 mb-1">플랫폼 판매 수수료 (%)</label>
             <input type="number" id="platform_fee_rate" value="15" step="0.5" class="w-full bg-sand-100 border border-sand-200 rounded-xl px-3 py-2 text-sand-900">
           </div>
           <div>
-            <label class="block text-sand-700 mb-1">PG/환전/반품 (%)</label>
-            <input type="number" id="extra_fee_sum" value="7.8" step="0.5" class="w-full bg-sand-100 border border-sand-200 rounded-xl px-3 py-2 text-sand-900">
+            <label class="block text-sand-700 mb-1">PG망 + 환전 + 반품 (%)</label>
+            <input type="number" id="extra_fee_rate" value="7.8" step="0.5" class="w-full bg-sand-100 border border-sand-200 rounded-xl px-3 py-2 text-sand-900">
           </div>
         </div>
       </div>
-      
-      <!-- 숨은 필드 -->
-      <input type="hidden" id="insurance_val" value="800">
-      <input type="hidden" id="pg_fee_rate" value="3.0">
-      <input type="hidden" id="fx_spread_rate" value="1.8">
-      <input type="hidden" id="return_loss_rate" value="3.0">
+
+      <input type="hidden" id="vat_rate" value="10">
     </div>
 
-    <!-- 우측 분석 리포트 & 워터폴 차트 -->
+    <!-- 우측: 종합 KPI + 인코텀즈 원가 워터폴 분해 (7 cols) -->
     <div class="lg:col-span-7 space-y-6">
 
-      <!-- 핵심 KPI 카드 -->
+      <!-- 핵심 KPI 대시보드 카드 -->
       <div class="bg-sand-50 border border-sand-200 rounded-3xl p-6 shadow-sm space-y-5">
         <div class="flex flex-wrap items-center justify-between border-b border-sand-200 pb-4 gap-2">
           <div>
-            <span class="text-[11px] font-semibold tracking-wider uppercase text-sand-700">DDP Net Margin Rate</span>
-            <div id="kpi_margin_rate" class="font-serif text-4xl font-semibold text-sand-900 mt-1">- %</div>
-            <div id="kpi_profit_display" class="text-xs text-sand-700 mt-0.5">건당 - 순익</div>
+            <div class="flex items-center gap-2">
+              <span id="activeTermTag" class="text-xs font-bold uppercase tracking-wider bg-sand-900 text-white px-3 py-0.5 rounded-full">FOB 조건</span>
+              <span class="text-[11px] font-semibold text-sand-700">Seller Net Margin</span>
+            </div>
+            <div id="kpi_margin_rate" class="font-serif text-4xl font-semibold text-sand-900 mt-2">- %</div>
+            <div id="kpi_profit_display" class="text-xs text-sand-700 mt-0.5">건당 - 순수익</div>
           </div>
           <div class="text-right">
-            <span class="text-[11px] font-semibold tracking-wider uppercase text-sand-700">권장 DDP 판매가 (마진 25%)</span>
-            <div id="kpi_rec_price" class="font-serif text-3xl font-semibold text-sand-900 mt-1">$ -</div>
-            <div class="text-xs text-sand-700 mt-0.5">역산 안전 판매가</div>
+            <span class="text-[11px] font-semibold tracking-wider uppercase text-sand-700">목표 마진 20% 권장 견적가</span>
+            <div id="kpi_rec_price" class="font-serif text-3xl font-semibold text-sand-900 mt-2">$ -</div>
+            <div class="text-xs text-sand-700 mt-0.5">바이어 인콰이어리 기준가</div>
           </div>
         </div>
 
-        <!-- 4대 조건별 셀러 잔여 실수익 -->
-        <div class="grid grid-cols-2 sm:grid-cols-4 gap-2.5 text-center text-xs">
+        <!-- 주요 원가 배분 통계 -->
+        <div class="grid grid-cols-3 gap-3 text-center text-xs">
           <div class="bg-sand-100 p-3 rounded-2xl border border-sand-200">
-            <span class="text-[10px] text-sand-700 block font-semibold">EXW 마진</span>
-            <span id="card_exw" class="font-serif text-sm font-semibold text-sand-900 block mt-1">-</span>
+            <span class="text-[10px] text-sand-700 block font-semibold">셀러 총 부담 원가</span>
+            <span id="stat_seller_cost" class="font-serif text-sm font-semibold text-sand-900 block mt-1">-</span>
           </div>
           <div class="bg-sand-100 p-3 rounded-2xl border border-sand-200">
-            <span class="text-[10px] text-sand-700 block font-semibold">FOB 마진</span>
-            <span id="card_fob" class="font-serif text-sm font-semibold text-sand-900 block mt-1">-</span>
-          </div>
-          <div class="bg-sand-100 p-3 rounded-2xl border border-sand-200">
-            <span class="text-[10px] text-sand-700 block font-semibold">CIF 마진</span>
-            <span id="card_cif" class="font-serif text-sm font-semibold text-sand-900 block mt-1">-</span>
+            <span class="text-[10px] text-sand-700 block font-semibold">총 매출액</span>
+            <span id="stat_revenue" class="font-serif text-sm font-semibold text-sand-900 block mt-1">-</span>
           </div>
           <div class="bg-sand-200/90 p-3 rounded-2xl border border-sand-300">
-            <span class="text-[10px] text-sand-900 block font-bold">DDP 최종</span>
-            <span id="card_ddp" class="font-serif text-sm font-bold text-sand-900 block mt-1">-</span>
+            <span class="text-[10px] text-sand-900 block font-bold">최종 셀러 순수익</span>
+            <span id="stat_net_profit" class="font-serif text-sm font-bold text-sand-900 block mt-1">-</span>
           </div>
         </div>
       </div>
 
-      <!-- 워터폴 비용 분해 차트 -->
+      <!-- 워터폴 원가 단계별 분해 차트 -->
       <div class="bg-sand-50 border border-sand-200 rounded-3xl p-6 shadow-sm">
         <div class="flex items-center justify-between mb-3">
-          <span class="font-serif italic font-semibold text-base text-sand-900">Cost Breakdown (Waterfall)</span>
-          <span class="text-xs text-sand-700">수익-비용 단계별 분해</span>
+          <div>
+            <span class="font-serif italic font-semibold text-base text-sand-900">Incoterms Cost Decomposition</span>
+            <p class="text-[11px] text-sand-700 mt-0.5" id="chartSubtitle">선택 조건에 따른 단계별 비용 및 잔여 순이익</p>
+          </div>
+          <span class="text-xs text-sand-700 bg-sand-200 px-2.5 py-1 rounded-full font-medium">Waterfall View</span>
         </div>
         <div class="h-64 sm:h-72 relative">
           <canvas id="waterfallChart"></canvas>
         </div>
+      </div>
+
+      <!-- 원가명세서 연동 링크 배너 -->
+      <div class="bg-sand-200/70 border border-sand-300/80 rounded-2xl p-4 flex items-center justify-between">
+        <div class="text-xs text-sand-800">
+          <span class="font-bold">📄 선택된 Incoterms 조건의 공식 견적 원가명세서 준비 완료</span>
+          <p class="text-sand-700 text-[11px] mt-0.5">바이어 인콰이어리 송부 및 세관 과세표준 증빙용 출력 리포트가 생성되었습니다.</p>
+        </div>
+        <a href="/breakdown" class="px-4 py-2 bg-sand-900 hover:bg-black text-white text-xs font-semibold rounded-full shadow-sm transition">
+          원가명세서 확인 →
+        </a>
       </div>
 
     </div>
@@ -165,47 +238,95 @@
 
 <script>
   let currentCurrency = 'KRW';
+  let currentTradeMode = 'B2B';
   let waterfallChart = null;
+
+  const TERM_INFO = {
+    EXW: { desc: "공장 인도: 셀러는 공장에서 물품 준비만 하면 모든 책임이 종료되며, 바이어가 모든 운송과 통관을 주관합니다.", oceanOnly: false },
+    FCA: { desc: "운송인 인도: 지정된 장소에서 바이어의 운송인에게 물품을 넘기며 수출통관까지 셀러가 완료합니다. (복합운송)", oceanOnly: false },
+    CPT: { desc: "운송비 지급 인도: 지정 목적지까지의 주운송비를 셀러가 지불하나, 첫 번째 운송인에게 인도된 시점에 위험은 이전됩니다.", oceanOnly: false },
+    CIP: { desc: "운송비·보험료 지급 인도: 지정 목적지까지 운임과 전위험담보(ICC-A) 보험료를 셀러가 부담합니다.", oceanOnly: false },
+    DAP: { desc: "도착장소 인도: 도착지 지정 장소에서 양하 준비된 상태로 바이어에게 인도합니다. (수입통관/관세는 바이어)", oceanOnly: false },
+    DPU: { desc: "도착지 양하 인도: 물품을 도착지에서 직접 내려(Unloaded) 인도하는 유일한 조건입니다.", oceanOnly: false },
+    DDP: { desc: "관세 지급 인도: 도착지 수입통관, 관세, 소비세, 문앞 배송까지 전 과정을 셀러가 전액 부담합니다.", oceanOnly: false },
+    FAS: { desc: "선측 인도: 선적항의 본선 옆(부두 또는 바지선)에 화물을 둘 때 인도가 완료됩니다. (해상 전용)", oceanOnly: true },
+    FOB: { desc: "본선 인도: 선적항 본선에 화물이 적재되는 순간 인도가 완료되며, 국내운송·수출통관을 셀러가 부담합니다. (해상 전용)", oceanOnly: true },
+    CFR: { desc: "운임 포함 인도: 목적항까지의 해상운임을 셀러가 지불하며, 본선 적재 시점에 위험은 바이어에게 이전됩니다. (해상 전용)", oceanOnly: true },
+    CIF: { desc: "운임·보험료 포함 인도: 목적항까지 해상운임과 적하보험료를 셀러가 지불합니다. (해상 전용)", oceanOnly: true }
+  };
+
+  function setTradeMode(mode) {
+    currentTradeMode = mode;
+    const btnB = document.getElementById('btnModeB2B');
+    const btnE = document.getElementById('btnModeEcom');
+    const ecomBox = document.getElementById('ecomFieldsBox');
+
+    if (mode === 'ECOMMERCE') {
+      btnE.className = 'px-3.5 py-1.5 rounded-full font-bold bg-sand-900 text-white transition shadow-sm';
+      btnB.className = 'px-3.5 py-1.5 rounded-full font-bold text-sand-700 hover:text-sand-900 transition';
+      ecomBox.classList.remove('hidden');
+    } else {
+      btnB.className = 'px-3.5 py-1.5 rounded-full font-bold bg-sand-900 text-white transition shadow-sm';
+      btnE.className = 'px-3.5 py-1.5 rounded-full font-bold text-sand-700 hover:text-sand-900 transition';
+      ecomBox.classList.add('hidden');
+    }
+    updateCalculations();
+  }
 
   function setCurrency(curr) {
     if (currentCurrency === curr) return;
     const rate = parseFloat(document.getElementById('exchange_rate').value) || 1360;
     currentCurrency = curr;
 
-    // UI 활성 버튼 스타일 변경
     const btnK = document.getElementById('btnCurrencyKRW');
     const btnU = document.getElementById('btnCurrencyUSD');
-    const badge = document.getElementById('currBadge');
+    const targetPriceEl = document.getElementById('target_price');
 
     if (curr === 'USD') {
-      btnU.className = 'px-4 py-1.5 rounded-full text-xs font-bold transition bg-sand-900 text-white shadow-sm';
-      btnK.className = 'px-4 py-1.5 rounded-full text-xs font-bold transition text-sand-700 hover:text-sand-900';
-      badge.innerText = '달러(USD) 기준';
+      btnU.className = 'px-3.5 py-1.5 rounded-full font-bold bg-sand-900 text-white transition shadow-sm';
+      btnK.className = 'px-3.5 py-1.5 rounded-full font-bold text-sand-700 hover:text-sand-900 transition';
       document.querySelectorAll('.unitLabel').forEach(el => el.innerText = '$');
 
-      // 값 환산 (/ rate)
-      ['exw_val', 'pack_val', 'local_trans_val', 'intl_freight_val', 'insurance_val'].forEach(id => {
+      if (parseFloat(targetPriceEl.value) > 1000) {
+        targetPriceEl.value = (parseFloat(targetPriceEl.value) / rate).toFixed(2);
+      }
+      ['exw_val', 'pack_val', 'local_trans_val', 'intl_freight_val', 'insurance_val', 'dest_delivery_val', 'dest_unloading_val'].forEach(id => {
         const el = document.getElementById(id);
-        el.value = (parseFloat(el.value) / rate).toFixed(2);
+        if (el) el.value = (parseFloat(el.value) / rate).toFixed(2);
       });
     } else {
-      btnK.className = 'px-4 py-1.5 rounded-full text-xs font-bold transition bg-sand-900 text-white shadow-sm';
-      btnU.className = 'px-4 py-1.5 rounded-full text-xs font-bold transition text-sand-700 hover:text-sand-900';
-      badge.innerText = '원화(KRW) 기준';
+      btnK.className = 'px-3.5 py-1.5 rounded-full font-bold bg-sand-900 text-white transition shadow-sm';
+      btnU.className = 'px-3.5 py-1.5 rounded-full font-bold text-sand-700 hover:text-sand-900 transition';
       document.querySelectorAll('.unitLabel').forEach(el => el.innerText = '₩');
 
-      // 값 환산 (* rate)
-      ['exw_val', 'pack_val', 'local_trans_val', 'intl_freight_val', 'insurance_val'].forEach(id => {
+      if (parseFloat(targetPriceEl.value) < 1000) {
+        targetPriceEl.value = Math.round(parseFloat(targetPriceEl.value) * rate);
+      }
+      ['exw_val', 'pack_val', 'local_trans_val', 'intl_freight_val', 'insurance_val', 'dest_delivery_val', 'dest_unloading_val'].forEach(id => {
         const el = document.getElementById(id);
-        el.value = Math.round(parseFloat(el.value) * rate);
+        if (el) el.value = Math.round(parseFloat(el.value) * rate);
       });
     }
 
     updateCalculations();
   }
 
+  function onTermChange() {
+    const term = document.getElementById('incotermSelect').value;
+    const info = TERM_INFO[term];
+    document.getElementById('activeTermTag').innerText = `${term} 조건`;
+    document.getElementById('termRuleDesc').innerText = info.desc;
+    document.getElementById('transportTypeBadge').innerText = info.oceanOnly ? '해상·내수로 전용' : '모든 운송수단 (복합)';
+    
+    // 시각적 강조 피드백
+    updateCalculations();
+  }
+
   async function updateCalculations() {
+    const term = document.getElementById('incotermSelect').value;
     const payload = {
+      incoterm: term,
+      trade_mode: currentTradeMode,
       currency: currentCurrency,
       exchange_rate: document.getElementById('exchange_rate').value,
       target_price: document.getElementById('target_price').value,
@@ -214,12 +335,12 @@
       local_trans_val: document.getElementById('local_trans_val').value,
       intl_freight_val: document.getElementById('intl_freight_val').value,
       insurance_val: document.getElementById('insurance_val').value,
+      dest_delivery_val: document.getElementById('dest_delivery_val').value,
+      dest_unloading_val: document.getElementById('dest_unloading_val').value,
       duty_rate: document.getElementById('duty_rate').value,
       vat_rate: document.getElementById('vat_rate').value,
-      platform_fee_rate: document.getElementById('platform_fee_rate').value,
-      pg_fee_rate: 3.0,
-      fx_spread_rate: 1.8,
-      return_loss_rate: 3.0
+      platform_fee_rate: document.getElementById('platform_fee_rate')?.value || 15,
+      extra_fee_rate: document.getElementById('extra_fee_rate')?.value || 7.8
     };
 
     const res = await fetch('/api/calculate', {
@@ -229,25 +350,32 @@
     });
     const data = await res.json();
 
+    // 원가명세서 출력을 위해 동기화
+    localStorage.setItem("lastSimulationData", JSON.stringify({
+      ...data,
+      inputs: payload,
+      timestamp: new Date().toLocaleDateString('ko-KR')
+    }));
+
     document.getElementById('kpi_margin_rate').innerText = data.margin_rate + '%';
-    
-    // 이익 표기 (단위 선택에 맞춰 표기)
+
     if (currentCurrency === 'USD') {
       const profitUsd = (data.net_profit_krw / data.rate).toFixed(2);
+      const revUsd = (data.gross_rev_krw / data.rate).toFixed(2);
+      const costUsd = (data.seller_cost_total / data.rate).toFixed(2);
+
       document.getElementById('kpi_profit_display').innerText = `건당 $${profitUsd} 순익`;
-      document.getElementById('card_exw').innerText = '$' + (data.profits.exw / data.rate).toFixed(2);
-      document.getElementById('card_fob').innerText = '$' + (data.profits.fob / data.rate).toFixed(2);
-      document.getElementById('card_cif').innerText = '$' + (data.profits.cif / data.rate).toFixed(2);
-      document.getElementById('card_ddp').innerText = '$' + (data.profits.ddp / data.rate).toFixed(2);
+      document.getElementById('stat_seller_cost').innerText = '$' + costUsd;
+      document.getElementById('stat_revenue').innerText = '$' + revUsd;
+      document.getElementById('stat_net_profit').innerText = '$' + profitUsd;
     } else {
       document.getElementById('kpi_profit_display').innerText = `건당 ${Number(data.net_profit_krw).toLocaleString()}원 순익`;
-      document.getElementById('card_exw').innerText = Math.round(data.profits.exw).toLocaleString() + ' ₩';
-      document.getElementById('card_fob').innerText = Math.round(data.profits.fob).toLocaleString() + ' ₩';
-      document.getElementById('card_cif').innerText = Math.round(data.profits.cif).toLocaleString() + ' ₩';
-      document.getElementById('card_ddp').innerText = Math.round(data.profits.ddp).toLocaleString() + ' ₩';
+      document.getElementById('stat_seller_cost').innerText = Math.round(data.seller_cost_total).toLocaleString() + ' ₩';
+      document.getElementById('stat_revenue').innerText = Math.round(data.gross_rev_krw).toLocaleString() + ' ₩';
+      document.getElementById('stat_net_profit').innerText = Math.round(data.net_profit_krw).toLocaleString() + ' ₩';
     }
 
-    document.getElementById('kpi_rec_price').innerText = '$' + data.rec_price_usd;
+    document.getElementById('kpi_rec_price').innerText = '$' + data.rec_quote_usd;
 
     renderWaterfall(data);
   }
@@ -256,19 +384,53 @@
     const ctx = document.getElementById('waterfallChart').getContext('2d');
     const isUsd = currentCurrency === 'USD';
     const rate = data.rate;
-
     const toDisplay = (v) => isUsd ? (v / rate) : v;
 
-    const labels = ['제조원가', '물류/통관', '관부가세', '수수료/공제', '셀러 순이익'];
-    const values = [
-      toDisplay(data.costs.exw),
-      toDisplay(data.costs.cif - data.costs.exw),
-      toDisplay(data.costs.tariff + data.costs.vat),
-      toDisplay(data.costs.operating_fees),
-      toDisplay(data.net_profit_krw)
-    ];
+    const labels = [];
+    const values = [];
+    const colors = [];
 
-    const colors = ['#C8BEAF', '#A39988', '#D08C5E', '#8C8275', '#1B1917'];
+    // 제조원가
+    labels.push('제조/포장 (EXW)');
+    values.push(toDisplay(data.cost_items.exw));
+    colors.push('#C8BEAF');
+
+    // 발생한 원가만 차트에 표시
+    if (data.cost_items.local_trans > 0) {
+      labels.push('국내운송/통관');
+      values.push(toDisplay(data.cost_items.local_trans));
+      colors.push('#A39988');
+    }
+    if (data.cost_items.intl_freight > 0) {
+      labels.push('국제운송료');
+      values.push(toDisplay(data.cost_items.intl_freight));
+      colors.push('#8C8275');
+    }
+    if (data.cost_items.insurance > 0) {
+      labels.push('적하보험료');
+      values.push(toDisplay(data.cost_items.insurance));
+      colors.push('#736A5E');
+    }
+    if (data.cost_items.dest_delivery > 0 || data.cost_items.dest_unloading > 0) {
+      labels.push('도착지배송/양하');
+      values.push(toDisplay(data.cost_items.dest_delivery + data.cost_items.dest_unloading));
+      colors.push('#D08C5E');
+    }
+    if (data.cost_items.tariff > 0) {
+      labels.push('수입관부가세 (DDP)');
+      values.push(toDisplay(data.cost_items.tariff + data.cost_items.vat));
+      colors.push('#B87244');
+    }
+    if (data.operating_fees > 0) {
+      labels.push(data.trade_mode === 'ECOMMERCE' ? '플랫폼/수수료' : '은행/무역제비용');
+      values.push(toDisplay(data.operating_fees));
+      colors.push('#5C5449');
+    }
+
+    // 최종 순수익
+    labels.push('셀러 최종 마진');
+    values.push(toDisplay(data.net_profit_krw));
+    colors.push('#1B1917');
 
     if (waterfallChart) waterfallChart.destroy();
     waterfallChart = new Chart(ctx, {
@@ -295,7 +457,7 @@
           }
         },
         scales: {
-          x: { grid: { display: false }, ticks: { color: '#524D44' } },
+          x: { grid: { display: false }, ticks: { color: '#524D44', font: { size: 10 } } },
           y: { grid: { color: '#E2DDD3' }, ticks: { color: '#524D44' } }
         }
       }
@@ -303,6 +465,8 @@
   }
 
   document.querySelectorAll('input').forEach(el => el.addEventListener('input', updateCalculations));
-  window.addEventListener('DOMContentLoaded', updateCalculations);
+  window.addEventListener('DOMContentLoaded', () => {
+    onTermChange();
+  });
 </script>
 {% endblock %}
